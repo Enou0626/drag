@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style>
+        .dragbox{
+            background-color: wheat;
+            width: 500px;
+            height: 300px;
+            float: left;
+        }
+        .dropbox{
+            background-color: rosybrown;
+            width: 500px;
+            height: 300px;
+            float: left;
+        }
+
+        .drag{
+            background-color: red;
+            width: 50px;
+            height: 30px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="dragbox">
+    <div class="drag"></div>
+    <div class="drag"></div>
+    <div class="drag"></div>
+</div>
+
+<div class="dropbox">
+
+</div>
+
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script>
+    var target ;
+
+    $('.drag').draggable({
+        helper: "clone",
+        drag:function (e) {
+            target = this;
+//            console.log(e.pageX);
+        },
+        start:function (e) {
+            console.log(e.target);
+        },
+        stop:function (e) {
+            console.log(e.target);
+        }
+
+    });
+    $('.dropbox').droppable({
+        drop:function (e) {
+            this.appendChild(target.cloneNode(true));
+            console.log(e);
+        },
+        drag:function (e) {
+            target = this;
+            console.log(e.pageX);
+        },
+    });
+</script>
+</body>
+</html>
