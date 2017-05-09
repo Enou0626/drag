@@ -54,6 +54,7 @@ $(function () {
     }
 
     function insertAfter(newElement, targetElement) {
+        console.log('after');
         var parent = targetElement.parentNode;
         if (parent.lastChild == targetElement) {
             // 如果最后的节点是目标元素，则直接添加。因为默认是最后
@@ -66,6 +67,8 @@ $(function () {
     }
 
     function insertBefore(newElement, targetElement) {
+        console.log('before');
+
         targetElement.parentNode.insertBefore(newElement, targetElement)
     }
 
@@ -116,17 +119,34 @@ $(function () {
             setBorderDefault();
             //鼠标落在表单元素宽度中间以上的部分，则上边变蓝
             if (pos.left < mouseLocation.x) {
-                if ((pos.bottom + pos.top) / 2 > mouseLocation.y)//元素的上边变蓝
+                if ((pos.bottom + pos.top) / 2 - (moveDom.offsetHeight) / 4 > mouseLocation.y)//元素的上边变蓝
                 {
+                    tag.flag = 2;
+
                     tag["deraction"] = -1;
                     tag["index"] = index;
                     $('.dropArea .form-group')[index].style.borderTop = "2px solid blue";
                 }
-                else//元素的下边变蓝
+                else if ((pos.bottom + pos.top) / 2 + (moveDom.offsetHeight) / 4 < mouseLocation.y)//元素的下边变蓝
                 {
+                    tag.flag = 2;
+
                     tag["deraction"] = 1;
                     tag["index"] = index;
                     $('.dropArea .form-group')[index].style.borderBottom = "2px solid blue";
+
+                } else {
+                    tag["deraction"] = 3;
+                    tag["index"] = index;
+                    tag.flag = -1;
+                    $('.form-layout div').droppable({
+                        drop: function (e) {
+                            var $moveDom = $(moveDom);
+                            if (!$moveDom.hasClass('form-layout')) {
+                                $(this).empty().append(moveDom.cloneNode(true));
+                            }
+                        }
+                    });
                 }
 
             }
@@ -163,11 +183,19 @@ $(function () {
     //
     // });
 
+    // $('.form-layout div').droppable({
+    //     drop: function (e) {
+    //         var $moveDom = $(moveDom);
+    //         if (!$moveDom.hasClass('form-layout')) {
+    //             $(this).empty().append(moveDom.cloneNode(true));
+    //         }
+    //     }
+    // });
+
 
     function dragStart(e) {
 
-        moveDom = e.target ;
-
+        moveDom = e.target;
 
         //区分拖拽的元素是要新增还是要交换位置，记录到flag上，1表示要新增，2表示交换位置
         if ($(moveDom).parent().hasClass('dragArea')) {
@@ -201,12 +229,11 @@ $(function () {
 
     $('.dropArea').droppable({
         drop: function (e) {
-
             if (tag.index != -1) {
                 var index = tag.index;
-                if (tag.deraction > 0) {//插上
+                if (tag.deraction >0) {//插上
                     var node;
-                    //flag为1，插入表单元素，否则就是换位置
+                    //flag为1，插入表单元素，2是换位置
                     if (tag.flag == 1) {
                         node = $(moveDom).clone();
                         node.draggable({
@@ -219,13 +246,14 @@ $(function () {
                         });
                         insertAfter(node[0], $('.dropArea .form-group')[index]);
                     }
-                    else {
+                    else if (tag.flag == 2) {
+                        console.log('flag2');
                         node = moveDom;
                         insertAfter(node, $('.dropArea .form-group')[index]);
 
                     }
                 }
-                else if (tag.deraction < 0) {//插下
+                else if (tag.deraction <0) {//插下
                     var node;
                     if (tag.flag == 1) {
                         node = $(moveDom).clone();
@@ -258,6 +286,8 @@ $(function () {
                     drag: dragOver,
                     stack: '.form-group'
                 });
+
+                console.log('a');
 
                 $('.dropArea').append(node);
             }
