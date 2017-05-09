@@ -140,8 +140,7 @@ $(function () {
 
     }
 
-
-    $('.form-group').draggable({
+    $('.dragArea .form-group').draggable({
         helper: 'clone',
         start: dragStart,
         stop: dragEnd,
@@ -149,7 +148,6 @@ $(function () {
         stack: '.form-group'
 
     });
-
 
     /*
      * 布局表单
@@ -165,9 +163,10 @@ $(function () {
     //
     // });
 
+
     function dragStart(e) {
 
-        moveDom = e.target;
+        moveDom = e.target ;
 
 
         //区分拖拽的元素是要新增还是要交换位置，记录到flag上，1表示要新增，2表示交换位置
@@ -188,6 +187,7 @@ $(function () {
 
     function dragEnd(e) {
         setBorderDefault();
+        moveDom = null;
         // $('.dropArea .form-group').draggable({ revert: true });
 
         // $('.dragArea .form-layout div').attr('draggable', false);
@@ -208,25 +208,19 @@ $(function () {
                     var node;
                     //flag为1，插入表单元素，否则就是换位置
                     if (tag.flag == 1) {
-                        node = $(moveDom.cloneNode(true));
+                        node = $(moveDom).clone();
                         node.draggable({
+                            greedy: true,
                             helper: 'clone',
-
                             start: dragStart,
-                            stop: dragEnd
-                            ,
+                            stop: dragEnd,
                             drag: dragOver,
                             stack: '.form-group'
-
-
                         });
-
                         insertAfter(node[0], $('.dropArea .form-group')[index]);
-
                     }
                     else {
                         node = moveDom;
-                        console.log(index + 'top');
                         insertAfter(node, $('.dropArea .form-group')[index]);
 
                     }
@@ -234,41 +228,35 @@ $(function () {
                 else if (tag.deraction < 0) {//插下
                     var node;
                     if (tag.flag == 1) {
-                        node = $(moveDom.cloneNode(true));
-                        node.draggable({
-                            helper: 'clone',
+                        node = $(moveDom).clone();
 
-                            start: dragStart
-                            ,
+                        node.draggable({
+                            greedy: true,
+                            helper: 'clone',
+                            start: dragStart,
                             drag: dragOver,
                             stack: '.form-group',
-
                             stop: dragEnd
                         });
                         insertBefore(node[0], $('.dropArea .form-group')[index]);
-
                     }
                     else {
                         node = moveDom;
-                        console.log(index + 'down');
-
                         insertBefore(node, $('.dropArea .form-group')[index]);
-
                     }
                 }
             }
             else if (tag.flag == 1)//第一个插入的表单元素
             {
-                var node = $(moveDom.cloneNode(true));
+                var node = $(moveDom).clone();
+
                 node.draggable({
+                    greedy: true,
                     helper: 'clone',
                     start: dragStart,
-                    stop: dragEnd
-                    ,
+                    stop: dragEnd,
                     drag: dragOver,
                     stack: '.form-group'
-
-
                 });
 
                 $('.dropArea').append(node);
