@@ -121,7 +121,7 @@ $(function () {
             if (pos.left < mouseLocation.x) {
                 if ((pos.bottom + pos.top) / 2 - (moveDom.offsetHeight) / 4 > mouseLocation.y)//元素的上边变蓝
                 {
-                    tag.flag = 2;
+                    // tag.flag = 2;
 
                     tag["deraction"] = -1;
                     tag["index"] = index;
@@ -129,7 +129,7 @@ $(function () {
                 }
                 else if ((pos.bottom + pos.top) / 2 + (moveDom.offsetHeight) / 4 < mouseLocation.y)//元素的下边变蓝
                 {
-                    tag.flag = 2;
+                    // tag.flag = 2;
 
                     tag["deraction"] = 1;
                     tag["index"] = index;
@@ -138,7 +138,7 @@ $(function () {
                 } else {
                     tag["deraction"] = 3;
                     tag["index"] = index;
-                    tag.flag = -1;
+                    // tag.flag = -1;
                     $('.form-layout div').droppable({
                         drop: function (e) {
                             var $moveDom = $(moveDom);
@@ -209,7 +209,6 @@ $(function () {
             // });
 
         }
-        console.log(tag.flag);
     }
 
 
@@ -231,7 +230,7 @@ $(function () {
         drop: function (e) {
             if (tag.index != -1) {
                 var index = tag.index;
-                if (tag.deraction >0) {//插上
+                if (tag.deraction ==1) {//插上
                     var node;
                     //flag为1，插入表单元素，2是换位置
                     if (tag.flag == 1) {
@@ -247,13 +246,12 @@ $(function () {
                         insertAfter(node[0], $('.dropArea .form-group')[index]);
                     }
                     else if (tag.flag == 2) {
-                        console.log('flag2');
                         node = moveDom;
                         insertAfter(node, $('.dropArea .form-group')[index]);
 
                     }
                 }
-                else if (tag.deraction <0) {//插下
+                else if (tag.deraction == -1) {//插下
                     var node;
                     if (tag.flag == 1) {
                         node = $(moveDom).clone();
@@ -268,7 +266,7 @@ $(function () {
                         });
                         insertBefore(node[0], $('.dropArea .form-group')[index]);
                     }
-                    else {
+                    else if (tag.flag == 2) {
                         node = moveDom;
                         insertBefore(node, $('.dropArea .form-group')[index]);
                     }
@@ -286,8 +284,6 @@ $(function () {
                     drag: dragOver,
                     stack: '.form-group'
                 });
-
-                console.log('a');
 
                 $('.dropArea').append(node);
             }
