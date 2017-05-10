@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <title>drop</title>
     <style>
-        *{
+        * {
             padding: 0;
             margin: 0;
         }
-        .left{
+
+        .left {
             float: left;
         }
-        .right{
+
+        .right {
             float: right;
         }
+
         .dropForm {
             height: auto;
-            overflow:auto;
+            overflow: auto;
         }
 
         .dropBox {
@@ -33,29 +36,33 @@
 
         }
 
-        .controlBox{
+        .controlBox {
             width: 15%;
             *width: 14%;
             min-height: 500px;
             height: auto;
             float: left;
             background-color: gainsboro;
+            font-size: 16px;
 
         }
 
-        .title{
+        .title {
             width: auto;
             margin: auto;
             text-align: center;
         }
-        .dropArea{
+
+        .dropArea {
             min-height: 500px;
             height: 100%;
         }
-        .dragArea{
+
+        .dragArea {
             height: 100%;
         }
-        .form-group{
+
+        .form-group {
             font-size: 16px;
             margin: 15px 10px;
             padding: 5px;
@@ -64,14 +71,20 @@
             min-height: 60px;
         }
 
-       label,input,textarea{
-        cursor: move;
+        .dragArea label, .dragArea input, .dragArea textarea {
+            cursor: move;
         }
 
         .form-layout {
             height: 60px;
+            box-sizing: border-box;
         }
-        .clearfix :after{
+
+        .nessesaryTag {
+            border-left: 1px red solid;
+        }
+
+        .clearfix :after {
             content: '';
             display: block;
             visibility: hidden;
@@ -80,9 +93,10 @@
             clear: both;
         }
 
-        .form-layout div{
+        .form-layout div {
             margin: 0;
         }
+
         .form-layout .three {
             box-sizing: border-box;
             width: 33.333%;
@@ -97,8 +111,16 @@
             float: left;
         }
 
-        .border-right{
+        .border-right {
             border-right: dashed 1px grey;
+        }
+
+        .controlBox .tip {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .controlForm {
+            margin: 20px 15px;
         }
     </style>
 
@@ -106,22 +128,22 @@
 <body>
 <div class="dropForm">
     <div class="dragBox">
-        <div class="title">字段控件</div>
+        <div class="title ">字段控件</div>
 
         <form class="dragArea clearfix">
-            <div class="form-group">
-                <label >单行文本</label>
-                <input type="text" class="form-control"  placeholder="单行文本">
+            <div class="form-group ">
+                <label>单行文本</label>
+                <input type="text" class="form-control" placeholder="单行文本">
             </div>
 
             <div class="form-group">
                 <label>文本域</label>
-                <textarea class="form-control" rows="3"  placeholder="文本域"></textarea>
+                <textarea class="form-control" rows="3" placeholder="文本域"></textarea>
             </div>
 
             <div class="form-group">
                 <label>文件上传</label>
-                <input type="file" >
+                <input type="file">
             </div>
 
             <div class="form-group">
@@ -156,11 +178,32 @@
     </div>
     <div class="dropBox">
         <div class="title">编辑区</div>
-        <form  class="dropArea"></form>
+        <form class="dropArea"></form>
     </div>
 
     <div class="controlBox">
         <div class="title">设置</div>
+
+        <div class="controlForm">
+            <div class="tip">标题 :</div>
+            <input type="text" class="controlTitle">
+        </div>
+
+        <div class="controlForm">
+            <div class="tip">是否必填 :</div>
+            <label for="radio-true">
+                是
+                <input name="nessesary" type="radio" id="radio-true" class="controlRadio" value='1'>
+
+            </label>
+
+            <label for="radio-false" class="right">
+                否
+                <input name="nessesary" type="radio" id="radio-false" class="controlRadio" checked="checked" value='2'>
+
+            </label>
+
+        </div>
     </div>
 
 </div>

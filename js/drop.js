@@ -44,13 +44,6 @@ $(function () {
         var x = e.pageX - scrollX || e.clientX;
         var y = e.pageY - scrollY || e.clientY;
         return {'x': x, 'y': y};
-
-        // var e = event || window.event;
-        // var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
-        // var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
-        // var x = e.pageX || e.clientX - scrollX;
-        // var y = e.pageY || e.clientY - scrollY;
-        // return {'x': x, 'y': y};
     }
 
     function insertAfter(newElement, targetElement) {
@@ -87,12 +80,7 @@ $(function () {
 
     }
 
-    // $('.dragArea .form-group').attr('draggable', true);
-
-
     function dragOver(e) {
-        // e.preventDefault();
-
         var mouseLocation = getMouseLocation();
         var index = -1;
         //检测目前鼠标正落在哪个表单元素上面
@@ -169,30 +157,6 @@ $(function () {
 
     });
 
-    /*
-     * 布局表单
-     * */
-    // $('.form-layout div').on('dragover', function (e) {
-    //     e.preventDefault();
-    //
-    // }).on('drop', function (e) {
-    //     var $moveDom = $(moveDom);
-    //     if (!$moveDom.hasClass('form-layout')) {
-    //         $(this).empty().append(moveDom.cloneNode(true));
-    //     }
-    //
-    // });
-
-    // $('.form-layout div').droppable({
-    //     drop: function (e) {
-    //         var $moveDom = $(moveDom);
-    //         if (!$moveDom.hasClass('form-layout')) {
-    //             $(this).empty().append(moveDom.cloneNode(true));
-    //         }
-    //     }
-    // });
-
-
     function dragStart(e) {
 
         moveDom = e.target;
@@ -203,34 +167,19 @@ $(function () {
         }
         else {
             tag.flag = 2;
-
-            // $('.dragArea').on("dragover", function (e) {
-            //     e.preventDefault();
-            // });
-
         }
     }
-
 
     function dragEnd(e) {
         setBorderDefault();
         moveDom = null;
-        // $('.dropArea .form-group').draggable({ revert: true });
-
-        // $('.dragArea .form-layout div').attr('draggable', false);
-        //
-        // $('.dragArea')[0].removeEventListener("dragover", function (e) {
-        //     e.preventDefault();
-        // });
-
     }
-
 
     $('.dropArea').droppable({
         drop: function (e) {
             if (tag.index != -1) {
                 var index = tag.index;
-                if (tag.deraction ==1) {//插上
+                if (tag.deraction == 1) {//插上
                     var node;
                     //flag为1，插入表单元素，2是换位置
                     if (tag.flag == 1) {
@@ -307,6 +256,50 @@ $(function () {
 
         }
     });
+
+    /*
+    * 操控栏
+    * */
+
+    var checkedDom, checkedDomTitle,controlRadio;
+
+    $('.dropArea').on('click', function (e) {//选中元素
+        if (!$(e.target).hasClass('dropArea')) {//排除父元素
+            $('.dropArea .form-group').css('backgroundColor', 'whitesmoke');
+            if ($(e.target).hasClass('form-group')) {//限定变色元素
+                $(e.target).css('backgroundColor', 'papayawhip');
+                checkedDom = e.target;
+                checkedDomTitle = $(checkedDom).find('label').text().trim();
+
+                $('.controlBox .controlTitle').val(checkedDomTitle)
+            }
+        }
+
+        if ($(checkedDom).hasClass('nessesaryTag')) {
+            $('#radio-true').attr('checked','checked');
+        }else {
+            $('#radio-false').attr('checked','false');
+
+        }
+
+    });
+
+    $('.controlBox .controlTitle').on('keyup', function (e) {
+        $(checkedDom).find('label').text($('.controlBox .controlTitle').val());
+    });
+
+    $('.controlBox .controlRadio').on('click',function (e) {
+        controlRadio = $(e.target).val();
+        console.log(controlRadio);
+        if (controlRadio=='1') {
+            $(checkedDom).addClass('nessesaryTag');
+        }else {
+            $(checkedDom).removeClass('nessesaryTag');
+
+        }
+    })
+
+
 
 
 });
