@@ -139,7 +139,7 @@ $(function () {
                     tag["deraction"] = 3;
                     tag["index"] = index;
                     // tag.flag = -1;
-                    $('.form-layout div').droppable({
+                    $('.dropArea .form-layout div').droppable({
                         drop: function (e) {
                             var $moveDom = $(moveDom);
                             if (!$moveDom.hasClass('form-layout')) {
