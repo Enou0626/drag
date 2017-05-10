@@ -259,6 +259,7 @@ $(function () {
 
     /*
     * 操控栏
+    * 
     * */
 
     var checkedDom, checkedDomTitle,controlRadio;
