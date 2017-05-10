@@ -131,7 +131,7 @@ $(function () {
                         drop: function (e) {
                             var $moveDom = $(moveDom);
                             if (!$moveDom.hasClass('form-layout')) {
-                                $(this).empty().append(moveDom.cloneNode(true));
+                                $(this).empty().append($moveDom.clone());
                             }
                         }
                     });
@@ -270,17 +270,15 @@ $(function () {
             if ($(e.target).hasClass('form-group')) {//限定变色元素
                 $(e.target).css('backgroundColor', 'papayawhip');
                 checkedDom = e.target;
-                checkedDomTitle = $(checkedDom).find('label').text().trim();
-
+                checkedDomTitle = $(checkedDom).find('label').text();
                 $('.controlBox .controlTitle').val(checkedDomTitle)
             }
         }
 
         if ($(checkedDom).hasClass('nessesaryTag')) {
-            $('#radio-true').attr('checked','checked');
+            $('#radio-true').attr('checked','true');
         }else {
             $('#radio-false').attr('checked','false');
-
         }
 
     });
