@@ -47,7 +47,6 @@ $(function () {
     }
 
     function insertAfter(newElement, targetElement) {
-        console.log('after');
         var parent = targetElement.parentNode;
         if (parent.lastChild == targetElement) {
             // 如果最后的节点是目标元素，则直接添加。因为默认是最后
@@ -60,8 +59,6 @@ $(function () {
     }
 
     function insertBefore(newElement, targetElement) {
-        console.log('before');
-
         targetElement.parentNode.insertBefore(newElement, targetElement)
     }
 
@@ -83,8 +80,8 @@ $(function () {
     function dragOver(e) {
         var mouseLocation = getMouseLocation();
         var index = -1;
-        //检测目前鼠标正落在哪个表单元素上面
 
+        //检测目前鼠标正落在哪个表单元素上面
         if ($('.dropArea .form-group').length > 0) {
             for (var i = 0; i < $('.dropArea .form-group').length; i++) {
                 var pos = $('.dropArea .form-group')[i].getBoundingClientRect();
@@ -109,8 +106,6 @@ $(function () {
             if (pos.left < mouseLocation.x) {
                 if ((pos.bottom + pos.top) / 2 - (moveDom.offsetHeight) / 4 > mouseLocation.y)//元素的上边变蓝
                 {
-                    // tag.flag = 2;
-
                     tag["deraction"] = -1;
                     tag["index"] = index;
                     $('.dropArea .form-group')[index].style.borderTop = "2px solid blue";
@@ -123,7 +118,7 @@ $(function () {
                     tag["index"] = index;
                     $('.dropArea .form-group')[index].style.borderBottom = "2px solid blue";
 
-                } else {
+                } else {//在表单控件中间
                     tag["deraction"] = 3;
                     tag["index"] = index;
                     // tag.flag = -1;
@@ -172,7 +167,7 @@ $(function () {
 
     function dragEnd(e) {
         setBorderDefault();
-        moveDom = null;
+        // moveDom = null;
     }
 
     $('.dropArea').droppable({
@@ -193,14 +188,11 @@ $(function () {
                             stack: '.form-group'
                         });
                         insertAfter(node[0], $('.dropArea .form-group')[index]);
-                    }
-                    else if (tag.flag == 2) {
+                    } else if (tag.flag == 2) {
                         node = moveDom;
                         insertAfter(node, $('.dropArea .form-group')[index]);
-
                     }
-                }
-                else if (tag.deraction == -1) {//插下
+                } else if (tag.deraction == -1) {//插下
                     var node;
                     if (tag.flag == 1) {
                         node = $(moveDom).clone();
@@ -214,15 +206,12 @@ $(function () {
                             stop: dragEnd
                         });
                         insertBefore(node[0], $('.dropArea .form-group')[index]);
-                    }
-                    else if (tag.flag == 2) {
+                    } else if (tag.flag == 2) {
                         node = moveDom;
                         insertBefore(node, $('.dropArea .form-group')[index]);
                     }
                 }
-            }
-            else if (tag.flag == 1)//第一个插入的表单元素
-            {
+            } else if (tag.flag == 1){//第一个插入的表单元素
                 var node = $(moveDom).clone();
 
                 node.draggable({
@@ -236,6 +225,7 @@ $(function () {
 
                 $('.dropArea').append(node);
             }
+
             tag.index = -1;
 
         }
@@ -251,18 +241,17 @@ $(function () {
             }
             else {
                 $target.remove();
-
             }
 
         }
     });
 
     /*
-    * 操控栏
-    *
-    * */
+     * 操控栏
+     *
+     * */
 
-    var checkedDom, checkedDomTitle,controlRadio;
+    var checkedDom, checkedDomTitle, controlRadio;
 
     $('.dropArea').on('click', function (e) {//选中元素
         if (!$(e.target).hasClass('dropArea')) {//排除父元素
@@ -276,9 +265,9 @@ $(function () {
         }
 
         if ($(checkedDom).hasClass('nessesaryTag')) {
-            $('#radio-true').attr('checked','true');
-        }else {
-            $('#radio-false').attr('checked','false');
+            $('#radio-true').attr('checked', 'true');
+        } else {
+            $('#radio-false').attr('checked', 'false');
         }
 
     });
@@ -287,18 +276,15 @@ $(function () {
         $(checkedDom).find('label').text($('.controlBox .controlTitle').val());
     });
 
-    $('.controlBox .controlRadio').on('click',function (e) {
+    $('.controlBox .controlRadio').on('click', function (e) {
         controlRadio = $(e.target).val();
         console.log(controlRadio);
-        if (controlRadio=='1') {
+        if (controlRadio == '1') {
             $(checkedDom).addClass('nessesaryTag');
-        }else {
+        } else {
             $(checkedDom).removeClass('nessesaryTag');
-
         }
     })
-
-
 
 
 });

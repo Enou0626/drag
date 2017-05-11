@@ -36,6 +36,14 @@
 
 </div>
 
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ul>
+
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script>
@@ -59,12 +67,32 @@
         drop:function (e) {
             this.appendChild(target.cloneNode(true));
             console.log(e);
+
         },
         drag:function (e) {
             target = this;
             console.log(e.pageX);
-        },
+        }
     });
+
+
+
+    $('ul').on('click',function (event) {
+        var index;
+
+        for (var i = 0; i < $('ul li').length; i++) {
+
+                if ($('ul li')[i]==event.target) {
+                    index = i;
+                    break;
+
+                }
+
+            }
+        console.log(index);
+    })
+
+
 </script>
 </body>
 </html>
