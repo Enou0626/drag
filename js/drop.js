@@ -211,7 +211,7 @@ $(function () {
                         insertBefore(node, $('.dropArea .form-group')[index]);
                     }
                 }
-            } else if (tag.flag == 1){//第一个插入的表单元素
+            } else if (tag.flag == 1) {//第一个插入的表单元素
                 var node = $(moveDom).clone();
 
                 node.draggable({
@@ -259,6 +259,7 @@ $(function () {
             if ($(e.target).hasClass('form-group')) {//限定变色元素
                 $(e.target).css('backgroundColor', 'papayawhip');
                 checkedDom = e.target;
+
                 checkedDomTitle = $(checkedDom).find('label').text();
                 $('.controlBox .controlTitle').val(checkedDomTitle)
             }
@@ -284,6 +285,115 @@ $(function () {
         } else {
             $(checkedDom).removeClass('nessesaryTag');
         }
+    });
+
+    /*
+     *表单名设置与获取
+     * */
+    var $dropAreaTitle = $('.dropArea .title');
+    var $controlFormName = $('.controlFormName');
+    $controlFormName.val($dropAreaTitle.text());
+    $controlFormName.on('keyup', function (e) {
+        $dropAreaTitle.text($(this).val());
+    });
+
+    // var formData = [
+    //     {
+    //         "field": {
+    //             "name": "field1",
+    //             "title": "基本信息",
+    //             "child": [
+    //                 {
+    //                     "layout": {
+    //                         "name": "layout1",
+    //                         "child": []
+    //                     },
+    //                     "input": {
+    //                         "name": "input1",
+    //                         "type": "text",
+    //                         "value": ""
+    //                     },
+    //                     "button": {
+    //                         "name": "button1",
+    //                         "type": "button",
+    //                         "value": "下一步"
+    //                     }
+    //                 }
+    //             ]
+    //         }
+    //     }
+    // ];
+
+    var formData = [
+        {
+            "field": {
+                "name": "field1",
+                "title": "基本信息",
+                "child": [{}]
+            }
+        }
+    ];
+
+    // var formHtml;
+
+    $('.save').on('click', function (e) {
+        // formHtml = $('.dropArea').html();
+        // console.log(formHtml);
+        // localStorage.setItem('showPage', formHtml);
+        // window.open('./show.html', '_self');
+        // console.log($('.dropArea').find('.form-group :nth-last-child(1)'));
+
+        var layoutChild = {};
+        formData[0].field.title = $controlFormName.val();
+        var $dropAreaLists = $('.dropArea').children('.form-group');
+
+        $dropAreaLists.each(function (i, v) {
+            var formControl = $(v).find('.form-control')[0];
+            var $formControlLabel = $(v).find('label');
+
+            if ($(v).hasClass('form-layout')) {
+                var $layoutChilds = $('.dropArea .form-group .layoutBox ');
+
+                formData[0].field.child[0][i] = {
+                    "child": []
+                };
+
+                $layoutChilds.each(function (j, v) {
+
+                    var layoutChilds = v.getElementsByClassName('form-group');
+
+                    $(layoutChilds).each (function (k, v) {
+                        var formControl = $(v).find('.form-control')[0];
+                        var $formControlLabel = $(v).find('label');
+                        layoutChild = {
+                            "name": formControl.name
+                            , "type": formControl.type
+                            , "value": formControl.value
+                            , "text": $formControlLabel.text()
+                            , "placeHolder": formControl.placeholder
+                        };
+
+                    });
+
+                    formData[0].field.child[0][i]["child"].push(layoutChild);
+
+                });
+
+            } else {
+
+                formData[0].field.child[0][i] = {
+                    "name": formControl.name,
+                    "type": formControl.type
+                    , "value": formControl.value
+                    , "text": $formControlLabel.text()
+                    , "placeHolder": formControl.placeholder
+                }
+
+            }
+
+        });
+
+        console.log(formData);
     })
 
 
