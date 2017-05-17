@@ -104,13 +104,13 @@ $(function () {
             setBorderDefault();
             //鼠标落在表单元素宽度中间以上的部分，则上边变蓝
             if (pos.left < mouseLocation.x) {
-                if ((pos.bottom + pos.top) / 2 - (moveDom.offsetHeight) / 4 > mouseLocation.y)//元素的上边变蓝
+                if ((pos.bottom + pos.top) / 2 - (moveDom.offsetHeight) / 3 > mouseLocation.y)//元素的上边变蓝
                 {
                     tag["deraction"] = -1;
                     tag["index"] = index;
                     $('.dropArea .form-group')[index].style.borderTop = "2px solid blue";
                 }
-                else if ((pos.bottom + pos.top) / 2 + (moveDom.offsetHeight) / 4 < mouseLocation.y)//元素的下边变蓝
+                else if ((pos.bottom + pos.top) / 2 + (moveDom.offsetHeight) / 3 < mouseLocation.y)//元素的下边变蓝
                 {
                     // tag.flag = 2;
 
@@ -123,6 +123,7 @@ $(function () {
                     tag["index"] = index;
                     // tag.flag = -1;
                     $('.dropArea .form-layout div').droppable({
+                        accept: ".dragArea .form-group",
                         drop: function (e) {
                             var $moveDom = $(moveDom);
                             if (!$moveDom.hasClass('form-layout')) {
@@ -170,6 +171,17 @@ $(function () {
         // moveDom = null;
     }
 
+    function nodeDraggableInit(node) {
+        node.draggable({
+            greedy: true,
+            helper: 'clone',
+            start: dragStart,
+            stop: dragEnd,
+            drag: dragOver,
+            stack: '.form-group'
+        });
+    }
+
     $('.dropArea').droppable({
         drop: function (e) {
             if (tag.index != -1) {
@@ -179,14 +191,8 @@ $(function () {
                     //flag为1，插入表单元素，2是换位置
                     if (tag.flag == 1) {
                         node = $(moveDom).clone();
-                        node.draggable({
-                            greedy: true,
-                            helper: 'clone',
-                            start: dragStart,
-                            stop: dragEnd,
-                            drag: dragOver,
-                            stack: '.form-group'
-                        });
+                        nodeDraggableInit(node);
+
                         insertAfter(node[0], $('.dropArea .form-group')[index]);
                     } else if (tag.flag == 2) {
                         node = moveDom;
@@ -197,14 +203,8 @@ $(function () {
                     if (tag.flag == 1) {
                         node = $(moveDom).clone();
 
-                        node.draggable({
-                            greedy: true,
-                            helper: 'clone',
-                            start: dragStart,
-                            drag: dragOver,
-                            stack: '.form-group',
-                            stop: dragEnd
-                        });
+                        nodeDraggableInit(node);
+
                         insertBefore(node[0], $('.dropArea .form-group')[index]);
                     } else if (tag.flag == 2) {
                         node = moveDom;
@@ -214,14 +214,7 @@ $(function () {
             } else if (tag.flag == 1) {//第一个插入的表单元素
                 var node = $(moveDom).clone();
 
-                node.draggable({
-                    greedy: true,
-                    helper: 'clone',
-                    start: dragStart,
-                    stop: dragEnd,
-                    drag: dragOver,
-                    stack: '.form-group'
-                });
+                nodeDraggableInit(node);
 
                 $('.dropArea').append(node);
             }
