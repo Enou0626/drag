@@ -352,9 +352,10 @@ $(function () {
             var $formControlLabel = $(v).find('label');
 
             if ($(v).hasClass('form-layout')) {
-                var $layoutChilds = $('.dropArea .form-group .layoutBox ');
+                // var $layoutChilds = $('.dropArea .form-group .layoutBox ');
+                var $layoutChilds = $(v).children('.layoutBox');
 
-                formData[0].field.child[0][i] = {
+                    formData[0].field.child[0]["layout"+i] = {
                     "child": []
                 };
 
@@ -365,37 +366,43 @@ $(function () {
                     $(layoutChilds).each (function (k, v) {
                         var formControl = $(v).find('.form-control')[0];
                         var $formControlLabel = $(v).find('label');
+                        var hasNessesaryClass = $(v).hasClass('nessesaryTag');
                         layoutChild = {
                             "name": formControl.name
                             , "type": formControl.type
                             , "value": formControl.value
                             , "text": $formControlLabel.text()
                             , "placeHolder": formControl.placeholder
+                            ,"nessesary":hasNessesaryClass
                         };
 
                     });
 
-                    formData[0].field.child[0][i]["child"].push(layoutChild);
+                    formData[0].field.child[0]["layout"+i]["child"].push(layoutChild);
+                    layoutChild = {};
 
                 });
 
             } else {
+                var hasNessesaryClass = $(v).hasClass('nessesaryTag');
 
-                formData[0].field.child[0][i] = {
+                formData[0].field.child[0]["dom"+i] = {
                     "name": formControl.name,
                     "type": formControl.type
                     , "value": formControl.value
                     , "text": $formControlLabel.text()
                     , "placeHolder": formControl.placeholder
+                    ,"nessesary":hasNessesaryClass
+
                 }
 
             }
 
         });
 
-        console.log(formData);
-    })
+        console.log(JSON.stringify(formData));
 
+    })
 
 });
 
