@@ -244,7 +244,7 @@ $(function () {
      *
      * */
 
-    var checkedDom, checkedDomTitle, controlRadio;
+    var checkedDom, checkedDomTitle;
 
     $('.dropArea').on('click', function (e) {//选中元素
         if (!$(e.target).hasClass('dropArea')) {//排除父元素
@@ -253,8 +253,8 @@ $(function () {
                 $(e.target).css('backgroundColor', 'papayawhip');
                 checkedDom = e.target;
 
-                checkedDomTitle = $(checkedDom).find('label').text();
-                $('.controlBox .controlTitle').val(checkedDomTitle)
+                checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
+                $('.controlBox .controlTitle').val(checkedDomTitle)//根据得到的标题文字设置控制栏内容
             }
         }
 
@@ -267,11 +267,11 @@ $(function () {
     });
 
     $('.controlBox .controlTitle').on('keyup', function (e) {
-        $(checkedDom).find('label').text($('.controlBox .controlTitle').val());
+        $(checkedDom).find('label').text($('.controlBox .controlTitle').val());//编辑控制栏控制选中元素标题文字
     });
 
-    $('.controlBox .controlRadio').on('click', function (e) {
-        controlRadio = $(e.target).val();
+    $('.controlBox .controlRadio-nessesary').on('click', function (e) {//编辑控制栏控制选中元素是否必填样式
+        var controlRadio = $(e.target).val();
         console.log(controlRadio);
         if (controlRadio == '1') {
             $(checkedDom).addClass('nessesaryTag');
@@ -279,6 +279,17 @@ $(function () {
             $(checkedDom).removeClass('nessesaryTag');
         }
     });
+
+    $('.controlBox .controlRadio-lay').on('click', function (e) {//编辑控制栏控制选中元素是否必填样式
+        var controlRadio = $(e.target).val();
+        console.log(controlRadio);
+        if (controlRadio == '2') {
+            $(checkedDom).find('label').addClass('title-ver');
+        } else {
+            $(checkedDom).find('label').removeClass('title-ver');
+        }
+    });
+
 
     /*
      *表单名设置与获取
@@ -290,66 +301,33 @@ $(function () {
         $dropAreaTitle.text($(this).val());
     });
 
-    // var formData = [
-    //     {
-    //         "field": {
-    //             "name": "field1",
-    //             "title": "基本信息",
-    //             "child": [
-    //                 {
-    //                     "layout": {
-    //                         "name": "layout1",
-    //                         "child": []
-    //                     },
-    //                     "input": {
-    //                         "name": "input1",
-    //                         "type": "text",
-    //                         "value": ""
-    //                     },
-    //                     "button": {
-    //                         "name": "button1",
-    //                         "type": "button",
-    //                         "value": "下一步"
-    //                     }
-    //                 }
-    //             ]
-    //         }
-    //     }
-    // ];
-
     var formData = [
-        {
-            "field": {
+
+            {
                 "name": "field1",
+                "componentkey": "FieldsetLayout",
                 "title": "基本信息",
-                "child": [{}]
+                "childs": []
             }
-        }
+
     ];
 
-    // var formHtml;
 
     $('.save').on('click', function (e) {
-        // formHtml = $('.dropArea').html();
-        // console.log(formHtml);
-        // localStorage.setItem('showPage', formHtml);
-        // window.open('./show.html', '_self');
-        // console.log($('.dropArea').find('.form-group :nth-last-child(1)'));
 
-        var layoutChild = {};
-        formData[0].field.title = $controlFormName.val();
+        formData[0].title = $controlFormName.val();
         var $dropAreaLists = $('.dropArea').children('.form-group');
 
         $dropAreaLists.each(function (i, v) {
+            var layoutChild = null;
             var formControl = $(v).find('.form-control')[0];
             var $formControlLabel = $(v).find('label');
 
             if ($(v).hasClass('form-layout')) {
-                // var $layoutChilds = $('.dropArea .form-group .layoutBox ');
                 var $layoutChilds = $(v).children('.layoutBox');
 
-                    formData[0].field.child[0]["layout"+i] = {
-                    "child": []
+                    formData[0].childs[i]={
+                    "layout": []
                 };
 
                 $layoutChilds.each(function (j, v) {
@@ -360,32 +338,37 @@ $(function () {
                         var formControl = $(v).find('.form-control')[0];
                         var $formControlLabel = $(v).find('label');
                         var hasNessesaryClass = $(v).hasClass('nessesaryTag');
+                        var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver':'hor';
                         layoutChild = {
-                            "name": formControl.name
+                            "titleLayout": hasverticalClass,
+                            "describe": "我是描述",
+                            "componentType":formControl.nodeName
                             , "type": formControl.type
                             , "value": formControl.value
-                            , "text": $formControlLabel.text()
-                            , "placeHolder": formControl.placeholder
-                            ,"nessesary":hasNessesaryClass
+                            , "title": $formControlLabel.text()
+                            ,"required":hasNessesaryClass
                         };
 
                     });
 
-                    formData[0].field.child[0]["layout"+i]["child"].push(layoutChild);
-                    layoutChild = {};
+                    formData[0].childs[i].layout.push(layoutChild);
+                    layoutChild = null;
 
                 });
 
             } else {
                 var hasNessesaryClass = $(v).hasClass('nessesaryTag');
+                var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver':'hor';
 
-                formData[0].field.child[0]["dom"+i] = {
-                    "name": formControl.name,
+
+                formData[0].childs[i]={
+                    "titleLayout": hasverticalClass,
+                    "describe": "我是描述",
+                    "componentType":formControl.nodeName,
                     "type": formControl.type
                     , "value": formControl.value
-                    , "text": $formControlLabel.text()
-                    , "placeHolder": formControl.placeholder
-                    ,"nessesary":hasNessesaryClass
+                    , "title": $formControlLabel.text()
+                    ,"required":hasNessesaryClass
 
                 }
 

@@ -45,410 +45,63 @@
     <li>5</li>
 </ul>
 
+<input type="text" class="test1" tag="TEST">
+<textArea class="test2"></textArea>
+<input type="radio">
+
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script>
-    var target;
-
-    $('.drag').draggable({
-        helper: "clone",
-        drag: function (e) {
-            target = this;
-//            console.log(e.pageX);
-        },
-        start: function (e) {
-            console.log(e.target);
-        },
-        stop: function (e) {
-            console.log(e.target);
-        }
-
-    });
-    $('.dropbox').droppable({
-        drop: function (e) {
-            this.appendChild(target.cloneNode(true));
-            console.log(e);
-
-        },
-        drag: function (e) {
-            target = this;
-            console.log(e.pageX);
-        }
-    });
-
-
-    $('ul').on('click', function (event) {
-        var index;
-
-        for (var i = 0; i < $('ul li').length; i++) {
-
-            if ($('ul li')[i] == event.target) {
-                index = i;
-                break;
-
-            }
-
-        }
-        console.log(index);
-    });
+    //    $('.test1')[0].tag = 'test';
+    console.log($('.test1')[0].tag);
 
     var data = [{
-        "field": {
-            "name": "field1",
-            "title": "编辑区",
-            "child": [{
-                "0": {"name": "", "type": "text", "value": "", "text": "单行文本", "placeHolder": "单行文本"},
-                "1": {"name": "", "type": "textarea", "value": "", "text": "文本域", "placeHolder": "文本域"},
-                "2": {"name": "", "type": "file", "value": "", "text": "文件上传", "placeHolder": ""},
-                "3": {
-                    "child": [
-                        {
-                            "name": "",
-                            "type": "checkbox",
-                            "value": "on",
-                            "text": "复选框",
-                            "placeHolder": ""
-                        },
-                        {
-                            "name": "",
-                            "type": "radio",
-                            "value": "on",
-                            "text": "单选框",
-                            "placeHolder": ""
-                        },
-                        {
-                            "name": "",
-                            "type": "file",
-                            "value": "",
-                            "text": "文件上传",
-                            "placeHolder": ""
-                        }]
-                }
+        "name": "field1",
+        "componentkey": "FieldsetLayout",
+        "title": "表单",
+        "childs": [{
+            "titleLayout": "hor",
+            "describe": "我是描述",
+            "componentType": "INPUT",
+            "type": "text",
+            "value": "",
+            "title": "文本输入框",
+            "required": false
+        }, {
+            "titleLayout": "hor",
+            "describe": "我是描述",
+            "componentType": "TEXTAREA",
+            "type": "textarea",
+            "value": "",
+            "title": "多行文本输入框",
+            "required": false
+        }, {
+            "layout": [{
+                "titleLayout": "hor",
+                "describe": "我是描述",
+                "componentType": "INPUT",
+                "type": "radio",
+                "value": "on",
+                "title": "单选框",
+                "required": false
+            }, {
+                "titleLayout": "hor",
+                "describe": "我是描述",
+                "componentType": "INPUT",
+                "type": "checkbox",
+                "value": "on",
+                "title": "多选框",
+                "required": false
+            }, {
+                "titleLayout": "hor",
+                "describe": "我是描述",
+                "componentType": "INPUT",
+                "type": "number",
+                "value": "",
+                "title": "数字输入框",
+                "required": false
             }]
-        }
-    }]
-
-    var data1 = [{
-        "field": {
-            "name": "field1",
-            "title": "编辑区",
-            "child": [{
-                "dom0": {
-                    "name": "",
-                    "type": "text",
-                    "value": "",
-                    "text": "单行文本",
-                    "placeHolder": "单行文本",
-                    "nessesary": false
-                },
-                "layout1": {
-                    "child": [{
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }]
-                },
-                "layout2": {
-                    "child": [{
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }]
-                }
-            }]
-        }
-    }]
-
-    var data2 = [{
-        "field": {
-            "name": "field1",
-            "title": "编辑区",
-            "child": [{
-                "dom0": {
-                    "name": "",
-                    "type": "text",
-                    "value": "",
-                    "text": "单行文本",
-                    "placeHolder": "单行文本",
-                    "nessesary": false
-                },
-                "layout1": {
-                    "child": [{
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "text",
-                        "value": "",
-                        "text": "单行文本",
-                        "placeHolder": "单行文本",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "textarea",
-                        "value": "",
-                        "text": "文本域",
-                        "placeHolder": "文本域",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "file",
-                        "value": "",
-                        "text": "文件上传",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "radio",
-                        "value": "on",
-                        "text": "单选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }]
-                },
-                "layout2": {
-                    "child": [{
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "text",
-                        "value": "",
-                        "text": "单行文本",
-                        "placeHolder": "单行文本",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "textarea",
-                        "value": "",
-                        "text": "文本域",
-                        "placeHolder": "文本域",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "file",
-                        "value": "",
-                        "text": "文件上传",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "radio",
-                        "value": "on",
-                        "text": "单选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }]
-                }
-            }]
-        }
-    }]
-
-    var data3 = [{
-        "field": {
-            "name": "field1",
-            "title": "编辑区",
-            "child": [{
-                "dom0": {
-                    "name": "",
-                    "type": "text",
-                    "value": "",
-                    "text": "单行文本",
-                    "placeHolder": "单行文本",
-                    "nessesary": false
-                },
-                "dom1": {
-                    "name": "",
-                    "type": "textarea",
-                    "value": "",
-                    "text": "文本域",
-                    "placeHolder": "文本域",
-                    "nessesary": false
-                },
-                "layout2": {
-                    "child": [{
-                        "name": "",
-                        "type": "text",
-                        "value": "",
-                        "text": "单行文本",
-                        "placeHolder": "单行文本",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "text",
-                        "value": "",
-                        "text": "单行文本",
-                        "placeHolder": "单行文本",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "text",
-                        "value": "",
-                        "text": "单行文本",
-                        "placeHolder": "单行文本",
-                        "nessesary": false
-                    }]
-                },
-                "layout3": {
-                    "child": [{
-                        "name": "",
-                        "type": "text",
-                        "value": "",
-                        "text": "单行文本",
-                        "placeHolder": "单行文本",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "text",
-                        "value": "",
-                        "text": "单行文本",
-                        "placeHolder": "单行文本",
-                        "nessesary": false
-                    }, {
-                        "name": "",
-                        "type": "text",
-                        "value": "",
-                        "text": "单行文本",
-                        "placeHolder": "单行文本",
-                        "nessesary": false
-                    }]
-                }
-            }]
-        }
-    }]
-
-    var data4 = [{
-        "field": {
-            "name": "field1",
-            "title": "编辑区",
-            "child": [{
-                "dom0": {
-                    "name": "",
-                    "type": "text",
-                    "value": "",
-                    "text": "单行文本",
-                    "placeHolder": "单行文本",
-                    "nessesary": false
-                },
-                "dom1": {
-                    "name": "",
-                    "type": "textarea",
-                    "value": "",
-                    "text": "文本域",
-                    "placeHolder": "文本域",
-                    "nessesary": false
-                },
-                "layout2": {
-                    "child": [{
-                        "name": "",
-                        "type": "checkbox",
-                        "value": "on",
-                        "text": "复选框",
-                        "placeHolder": "",
-                        "nessesary": false
-                    }, {}, {}]
-                },
-                "layout3": {"child": [{}, {}, {}]}
-            }]
-        }
+        }]
     }]
 
 
