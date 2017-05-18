@@ -239,6 +239,7 @@ $(function () {
         }
     });
 
+
     /*
      * 操控栏
      *
@@ -247,32 +248,58 @@ $(function () {
     var checkedDom, checkedDomTitle;
 
     $('.dropArea').on('click', function (e) {//选中元素
+
+        $('.control-special').css('display', 'none');//隐藏所有非公共控制表单
+
         if (!$(e.target).hasClass('dropArea')) {//排除父元素
             $('.dropArea .form-group').css('backgroundColor', 'whitesmoke');
             if ($(e.target).hasClass('form-group')) {//限定变色元素
                 $(e.target).css('backgroundColor', 'papayawhip');
                 checkedDom = e.target;
-
                 checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
-                $('.controlBox .controlTitle').val(checkedDomTitle)//根据得到的标题文字设置控制栏内容
+                $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
             }
         }
 
-        if ($(checkedDom).hasClass('nessesaryTag')) {
+        if ($(checkedDom).hasClass('nessesaryTag')) {//是否必填
             $('#radio-true').attr('checked', 'true');
         } else {
             $('#radio-false').attr('checked', 'false');
         }
 
+        if ($(checkedDom).find('label').hasClass('title-ver')) {//布局方式
+            $('#radio-ver').attr('checked', 'true');
+        } else {
+            $('#radio-hor').attr('checked', 'false');
+        }
+
+        //各表单不同操作
+        var $controlDom = $(checkedDom).children('.form-control');
+        // console.log(controlDom);
+        var nodeName = $controlDom[0].localName;
+        if (nodeName == 'input' && $controlDom[0].type == 'text' || nodeName == 'textarea') {//操作节点为input类型
+                // console.log($controlDom[0].localName+";"+$controlDom[0].type);
+                $('.control-input-width').css('display', 'block');
+                $('.control-input-default').css('display', 'block');
+
+                $('.controlBox .input-max-length').val($controlDom[0].maxLength);
+                $('.controlBox .input-default').val($controlDom[0].value);
+
+        }
+
+
     });
+
+    /*
+     * 操控区事件监听
+     * */
 
     $('.controlBox .controlTitle').on('keyup', function (e) {
-        $(checkedDom).find('label').text($('.controlBox .controlTitle').val());//编辑控制栏控制选中元素标题文字
+        $(checkedDom).find('label').text($('.controlBox .controlTitle').val());//标题文字
     });
 
-    $('.controlBox .controlRadio-nessesary').on('click', function (e) {//编辑控制栏控制选中元素是否必填样式
+    $('.controlBox .controlRadio-nessesary').on('click', function (e) {//必填样式
         var controlRadio = $(e.target).val();
-        console.log(controlRadio);
         if (controlRadio == '1') {
             $(checkedDom).addClass('nessesaryTag');
         } else {
@@ -280,9 +307,8 @@ $(function () {
         }
     });
 
-    $('.controlBox .controlRadio-lay').on('click', function (e) {//编辑控制栏控制选中元素是否必填样式
+    $('.controlBox .controlRadio-lay').on('click', function (e) {//布局方式
         var controlRadio = $(e.target).val();
-        console.log(controlRadio);
         if (controlRadio == '2') {
             $(checkedDom).find('label').addClass('title-ver');
         } else {
@@ -290,10 +316,17 @@ $(function () {
         }
     });
 
+    $('.controlBox .input-max-length').on('keyup', function (e) {
+        var inputMax = $('.controlBox .input-max-length').val();
+        $(checkedDom).children('.form-control')[0].maxLength = inputMax;//输入最大长度
+    });
 
-    /*
-     *表单名设置与获取
-     * */
+    $('.controlBox .input-default').on('keyup', function (e) {
+        var inputDefault = $('.controlBox .input-default').val();
+        $(checkedDom).children('.form-control')[0].value = inputDefault;//默认文本内容
+    });
+
+    //表单名设置与获取
     var $dropAreaTitle = $('.dropArea .title');
     var $controlFormName = $('.controlFormName');
     $controlFormName.val($dropAreaTitle.text());
@@ -301,17 +334,17 @@ $(function () {
         $dropAreaTitle.text($(this).val());
     });
 
-    var formData = [
+    /*
+     *  遍历dom节点保存至json对象
+     * */
 
-            {
-                "name": "field1",
-                "componentkey": "FieldsetLayout",
-                "title": "基本信息",
-                "childs": []
-            }
-
+    var formData = [//初始化json对象
+        {
+            "componentkey": "FieldsetLayout",
+            "title": $dropAreaTitle.text(),
+            "childs": []
+        }
     ];
-
 
     $('.save').on('click', function (e) {
 
@@ -326,7 +359,7 @@ $(function () {
             if ($(v).hasClass('form-layout')) {
                 var $layoutChilds = $(v).children('.layoutBox');
 
-                    formData[0].childs[i]={
+                formData[0].childs[i] = {
                     "layout": []
                 };
 
@@ -334,19 +367,21 @@ $(function () {
 
                     var layoutChilds = v.getElementsByClassName('form-group');
 
-                    $(layoutChilds).each (function (k, v) {
+                    $(layoutChilds).each(function (k, v) {
                         var formControl = $(v).find('.form-control')[0];
                         var $formControlLabel = $(v).find('label');
                         var hasNessesaryClass = $(v).hasClass('nessesaryTag');
-                        var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver':'hor';
+                        var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver' : 'hor';
                         layoutChild = {
                             "titleLayout": hasverticalClass,
-                            "describe": "我是描述",
-                            "componentType":formControl.nodeName
+                            "describe": "",
+                            "componentType": formControl.nodeName
                             , "type": formControl.type
                             , "value": formControl.value
                             , "title": $formControlLabel.text()
-                            ,"required":hasNessesaryClass
+                            , "required": hasNessesaryClass
+                            , "defaultText": formControl.value
+                            , "maxLength": formControl.maxLength
                         };
 
                     });
@@ -358,17 +393,18 @@ $(function () {
 
             } else {
                 var hasNessesaryClass = $(v).hasClass('nessesaryTag');
-                var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver':'hor';
+                var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver' : 'hor';
 
-
-                formData[0].childs[i]={
+                formData[0].childs[i] = {
                     "titleLayout": hasverticalClass,
-                    "describe": "我是描述",
-                    "componentType":formControl.nodeName,
+                    "describe": "",
+                    "componentType": formControl.nodeName,
                     "type": formControl.type
                     , "value": formControl.value
                     , "title": $formControlLabel.text()
-                    ,"required":hasNessesaryClass
+                    , "required": hasNessesaryClass
+                    , "defaultText": formControl.value
+                    , "maxLength": formControl.maxLength
 
                 }
 
