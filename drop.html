@@ -138,6 +138,10 @@
             display: none;
         }
 
+        #options{
+            width: 100%;
+        }
+
     </style>
 
 </head>
@@ -161,13 +165,13 @@
                 <label>单选框</label>
                 <ul>
                     <li>
-                        <input type="radio" checked="false" class="form-control" name="radio"> <span>选项1</span>
+                        <input type="radio" checked="true" class="form-control" name="radio"> <span>选项1</span>
                     </li>
                     <li>
-                        <input type="radio" checked="false" class="form-control" name="radio"> <span>选项2</span>
+                        <input type="radio"  class="form-control" name="radio"> <span>选项2</span>
                     </li>
                     <li>
-                        <input type="radio" checked="false" class="form-control" name="radio"> <span>选项3</span>
+                        <input type="radio" class="form-control" name="radio"> <span>选项3</span>
                     </li>
                 </ul>
             </div>
@@ -271,18 +275,19 @@
             <input type="number" value="10" class="input-max-length">
         </div>
 
-        <div class="controlForm control-special hidden">
+        <div class="controlForm control-special control-options hidden">
             <div class="tip">选项设置 :</div>
+            <textarea name="" id="options" rows="3" >option1,option2</textarea>
             <ul>
-                <li>
-                    <input type="text" value="选项1">
-                </li>
-                <li>
-                    <input type="text" value="选项2">
-                </li>
-                <li>
-                    <input type="text" value="选项3">
-                </li>
+                <!--<li>-->
+                    <!--<input type="text" value="选项1">-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<input type="text" value="选项2">-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<input type="text" value="选项3">-->
+                <!--</li>-->
             </ul>
         </div>
 
