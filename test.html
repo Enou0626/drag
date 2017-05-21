@@ -47,60 +47,34 @@
 
 <input type="text" class="test1" tag="TEST">
 <textArea class="test2"></textArea>
-<input type="radio">
+<input type="radio" class="radio">
 
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script>
     //    $('.test1')[0].tag = 'test';
-    console.log($('.test1')[0].tag);
-
+    console.log($('.radio')[0].nodeName.);
     var data = [{
-        "name": "field1",
-        "componentkey": "FieldsetLayout",
         "title": "表单",
         "childs": [{
-            "titleLayout": "hor",
-            "describe": "我是描述",
-            "componentType": "INPUT",
-            "type": "text",
-            "value": "",
-            "title": "文本输入框",
-            "required": false
-        }, {
-            "titleLayout": "hor",
-            "describe": "我是描述",
-            "componentType": "TEXTAREA",
-            "type": "textarea",
-            "value": "",
-            "title": "多行文本输入框",
-            "required": false
-        }, {
-            "layout": [{
+            "layout": [
+                {
                 "titleLayout": "hor",
-                "describe": "我是描述",
-                "componentType": "INPUT",
+                "describe": "",
+                "componentType": "input",
                 "type": "radio",
                 "value": "on",
                 "title": "单选框",
-                "required": false
-            }, {
-                "titleLayout": "hor",
-                "describe": "我是描述",
-                "componentType": "INPUT",
-                "type": "checkbox",
-                "value": "on",
-                "title": "多选框",
-                "required": false
-            }, {
-                "titleLayout": "hor",
-                "describe": "我是描述",
-                "componentType": "INPUT",
-                "type": "number",
-                "value": "",
-                "title": "数字输入框",
-                "required": false
-            }]
+                "required": false,
+                "defaultText": "on",
+                "maxLength": -1,
+                "options": [{"checked": false, "text": "选项1"}, {"checked": false, "text": "选项2"}, {
+                    "checked": false,
+                    "text": "选项3"
+                }]
+            }
+            , null
+                , null]
         }]
     }]
 

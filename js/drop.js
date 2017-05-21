@@ -250,15 +250,22 @@ $(function () {
     $('.dropArea').on('click', function (e) {//选中元素
 
         $('.control-special').css('display', 'none');//隐藏所有非公共控制表单
+        $('.dropArea .form-group').css('backgroundColor', 'whitesmoke');//初始化背景色
 
-        if (!$(e.target).hasClass('dropArea')) {//排除父元素
-            $('.dropArea .form-group').css('backgroundColor', 'whitesmoke');
-            if ($(e.target).hasClass('form-group')) {//限定变色元素
-                $(e.target).css('backgroundColor', 'papayawhip');
-                checkedDom = e.target;
-                checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
-                $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
-            }
+
+        checkedDom = e.target;
+
+        var $checkedDomParent = $(checkedDom).parent().parent();
+
+        if ($(checkedDom).hasClass('form-group')) {
+            $(checkedDom).css('backgroundColor', 'papayawhip');
+            checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
+            $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
+        }else if($checkedDomParent.hasClass('form-group')){
+            checkedDom = $checkedDomParent[0];
+            $(checkedDom).css('backgroundColor', 'papayawhip');
+            checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
+            $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
         }
 
         if ($(checkedDom).hasClass('nessesaryTag')) {//是否必填
@@ -274,17 +281,23 @@ $(function () {
         }
 
         //各表单不同操作
-        var $controlDom = $(checkedDom).children('.form-control');
-        // console.log(controlDom);
-        var nodeName = $controlDom[0].localName;
-        if (nodeName == 'input' && $controlDom[0].type == 'text' || nodeName == 'textarea') {//操作节点为input类型
-                // console.log($controlDom[0].localName+";"+$controlDom[0].type);
-                $('.control-input-width').css('display', 'block');
-                $('.control-input-default').css('display', 'block');
+        var $controlDom = $(checkedDom).find('.form-control');
+        // console.log($controlDom);
+        if ($controlDom[0]) {
+            var nodeName = $controlDom[0].nodeName.toLowerCase();
+        }
+        var isInputText = nodeName == 'input' && $controlDom[0].type == 'text';
+        var isRadios = $(checkedDom).hasClass('radio');
 
-                $('.controlBox .input-max-length').val($controlDom[0].maxLength);
-                $('.controlBox .input-default').val($controlDom[0].value);
+        if (isInputText || nodeName == 'textarea') {//单行或多行文本
+            // console.log($controlDom[0].localName+";"+$controlDom[0].type);
+            $('.control-input-width').css('display', 'block');
+            $('.control-input-default').css('display', 'block');
 
+            $('.controlBox .input-max-length').val($controlDom[0].maxLength);
+            $('.controlBox .input-default').val($controlDom[0].value);
+        } else if (isRadios) {
+            console.log('radio');
         }
 
 
@@ -340,11 +353,27 @@ $(function () {
 
     var formData = [//初始化json对象
         {
-            "componentkey": "FieldsetLayout",
+            // "componentkey": "FieldsetLayout",
             "title": $dropAreaTitle.text(),
             "childs": []
         }
     ];
+
+    function initJsonObj(hasverticalClass, formControl, $formControlLabel, hasNessesaryClass, options) {
+        return {
+            "titleLayout": hasverticalClass,
+            "describe": "",
+            "componentType": formControl.nodeName.toLowerCase()
+            , "type": formControl.type
+            , "value": formControl.value
+            , "title": $formControlLabel.text()
+            , "required": hasNessesaryClass
+            , "defaultText": formControl.value
+            , "maxLength": formControl.maxLength
+            , "options": options
+
+        };
+    }
 
     $('.save').on('click', function (e) {
 
@@ -356,7 +385,7 @@ $(function () {
             var formControl = $(v).find('.form-control')[0];
             var $formControlLabel = $(v).find('label');
 
-            if ($(v).hasClass('form-layout')) {
+            if ($(v).hasClass('form-layout')) { // 布局控件
                 var $layoutChilds = $(v).children('.layoutBox');
 
                 formData[0].childs[i] = {
@@ -372,17 +401,20 @@ $(function () {
                         var $formControlLabel = $(v).find('label');
                         var hasNessesaryClass = $(v).hasClass('nessesaryTag');
                         var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver' : 'hor';
-                        layoutChild = {
-                            "titleLayout": hasverticalClass,
-                            "describe": "",
-                            "componentType": formControl.nodeName
-                            , "type": formControl.type
-                            , "value": formControl.value
-                            , "title": $formControlLabel.text()
-                            , "required": hasNessesaryClass
-                            , "defaultText": formControl.value
-                            , "maxLength": formControl.maxLength
-                        };
+                        var options = [];
+
+                        if ($(v).hasClass('radio')) {
+
+                            $(v).find('ul li').each(function (i, v) {
+                                var text = $(v).children('span').text();
+                                var checked = $(v).children('input')[0].checked;
+                                // console.log($(v).children('input'));
+                                options.push({"checked": checked, "text": text});
+                            });
+                        }
+
+                        layoutChild = initJsonObj(hasverticalClass, formControl,
+                            $formControlLabel, hasNessesaryClass, options);
 
                     });
 
@@ -394,19 +426,21 @@ $(function () {
             } else {
                 var hasNessesaryClass = $(v).hasClass('nessesaryTag');
                 var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver' : 'hor';
+                var options = [];
 
-                formData[0].childs[i] = {
-                    "titleLayout": hasverticalClass,
-                    "describe": "",
-                    "componentType": formControl.nodeName,
-                    "type": formControl.type
-                    , "value": formControl.value
-                    , "title": $formControlLabel.text()
-                    , "required": hasNessesaryClass
-                    , "defaultText": formControl.value
-                    , "maxLength": formControl.maxLength
 
+                if ($(v).hasClass('radio')) {
+
+                    $(v).find('ul li').each(function (i, v) {
+                        var text = $(v).children('span').text();
+                        var checked = $(v).children('input')[0].checked;
+                        // console.log($(v).children('input'));
+                        options.push({"checked": checked, "text": text});
+                    });
                 }
+
+                formData[0].childs[i] = initJsonObj(hasverticalClass, formControl,
+                    $formControlLabel, hasNessesaryClass, options);
 
             }
 
