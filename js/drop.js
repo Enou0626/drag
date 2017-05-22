@@ -257,7 +257,7 @@ $(function () {
 
         console.log(checkedDom);
 
-        var isFather = $(checkedDom).parent().parent().hasClass('form-group') ;
+        var isFather = $(checkedDom).parent().parent().hasClass('form-group');
         var isGrandFather = $(checkedDom).parent().parent().parent().hasClass('form-group');
 
         if ($(checkedDom).hasClass('form-group')) {
@@ -269,7 +269,7 @@ $(function () {
             $(checkedDom).css('backgroundColor', 'papayawhip');
             checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
             $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
-        }else if (isGrandFather){
+        } else if (isGrandFather) {
             checkedDom = $(checkedDom).parent().parent().parent()[0];
             $(checkedDom).css('backgroundColor', 'papayawhip');
             checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
@@ -312,13 +312,15 @@ $(function () {
 
             $controlDom.each(function (i, v) {
                 var value = $(v).next('span').text();
-                optionshtml += '<input type="radio" class="form-control" name="radio"><span>'+value+'</span>';
-                textAreaStr += value +','
+                optionshtml += '<input type="radio" class="form-control" name="radio"><span>' + value + '</span>';
+                textAreaStr += value + ','
             });
 
-            textAreaStr=textAreaStr.substring(0,textAreaStr.length-1);
+            textAreaStr = textAreaStr.substring(0, textAreaStr.length - 1);
             $('.controlBox .control-options ul').html(optionshtml);
             $('#options').val(textAreaStr);
+
+            optionsListener();
 
         }
 
@@ -361,21 +363,29 @@ $(function () {
         $(checkedDom).children('.form-control')[0].value = inputDefault;//默认文本内容
     });
 
-    $('#options').on('keyup',function (e) {//option编辑框
+    $('#options').on('keyup', function (e) {//option编辑框
         var options = $('#options').val();
         var optionListsArr = options.split(',');
         var controlOptionHtml = '';
 
         for (var i = 0; i < optionListsArr.length; i++) {
             var obj = optionListsArr[i];
-            controlOptionHtml += '<li><input type="radio"  class="form-control" name="radio"> <span>'+obj+'</span></li>'
+            controlOptionHtml += '<li><input type="radio"  class="form-control" name="radio"><span>' + obj + '</span></li>'
         }
 
-        $('.controlBox .control-options ul').html(controlOptionHtml);
-        $(checkedDom).children('ul').html(controlOptionHtml);
+        $('.controlBox .control-options ul').html(controlOptionHtml); //操作栏
+
+        $(checkedDom).children('ul').html(controlOptionHtml); //编辑区
     });
 
-
+    function optionsListener() {
+        var $optionLists = $('.control-options input');
+        $optionLists.on('change', function (e) {
+            $optionLists.each(function (i, v) {
+                $(checkedDom).find('input')[i].checked = v.checked;
+            })
+        });
+    }
 
     //表单名设置与获取
     var $dropAreaTitle = $('.dropArea .title');

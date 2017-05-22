@@ -47,37 +47,19 @@
 
 <input type="text" class="test1" tag="TEST">
 <textArea class="test2"></textArea>
-<input type="radio" class="radio">
+<input type="radio" class="radio" name="radio" checked>
+<input type="radio" class="radio" name="radio">
+<input type="radio" class="radio" name="radio">
 
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script>
     //    $('.test1')[0].tag = 'test';
-    console.log($('.radio')[0].nodeName.);
-    var data = [{
-        "title": "表单",
-        "childs": [{
-            "layout": [
-                {
-                "titleLayout": "hor",
-                "describe": "",
-                "componentType": "input",
-                "type": "radio",
-                "value": "on",
-                "title": "单选框",
-                "required": false,
-                "defaultText": "on",
-                "maxLength": -1,
-                "options": [{"checked": false, "text": "选项1"}, {"checked": false, "text": "选项2"}, {
-                    "checked": false,
-                    "text": "选项3"
-                }]
-            }
-            , null
-                , null]
-        }]
-    }]
-
+   $('.radio').on('change',function (e) {
+       $('.radio').each(function (i, v) {
+           console.log(v.checked);
+       })
+   })
 
 </script>
 </body>
