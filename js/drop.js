@@ -233,7 +233,7 @@ $(function () {
             tag.index = -1;
 
         }
-    }).on('dblclick', function (e) {
+    }).on('dblclick', function (e) {//双击删除
         var $target = $(e.target);
         var $targetParent = $target.parent();
         if (!$target.hasClass('dropArea')) {
@@ -250,11 +250,9 @@ $(function () {
         }
     });
 
-
     /*
      * 属性操控
      * */
-
     var checkedDom, checkedDomTitle;
 
     function selectedColor() {
@@ -304,6 +302,7 @@ $(function () {
         var isInputText = nodeName == 'input' && $controlDom[0].type == 'text';
         var isRadios = $(checkedDom).hasClass('radio');
         var isCheckbox = $(checkedDom).hasClass('checkbox');
+        var isNumber = nodeName == 'input' && $controlDom[0].type == 'number';
 
         if (isInputText || nodeName == 'textarea') {//单行或多行文本
             // console.log($controlDom[0].localName+";"+$controlDom[0].type);
@@ -316,6 +315,10 @@ $(function () {
             initControlOptions($controlDom, 'radio');
         } else if (isCheckbox) {
             initControlOptions($controlDom, 'checkbox');
+        } else if (isNumber) {
+            $('.control-number').css('display', 'block');
+            $('.controlBox .number-default').val($controlDom[0].value);
+
         }
     });
 
@@ -347,14 +350,36 @@ $(function () {
     });
 
     $('.controlBox .input-max-length').on('keyup', function (e) {
-        var inputMax = $('.controlBox .input-max-length').val();
+        var inputMax = $(this).val();
         $(checkedDom).children('.form-control')[0].maxLength = inputMax;//输入最大长度
     });
 
     $('.controlBox .input-default').on('keyup', function (e) {
-        var inputDefault = $('.controlBox .input-default').val();
+        var inputDefault = $(this).val();
         $(checkedDom).children('.form-control')[0].value = inputDefault;//默认文本内容
     });
+
+    var decimal = 0;
+
+    $('.controlBox .number-decimal').on('change',function (e) {
+        decimal = this.value;
+        console.log(this.value);
+    });
+
+    function limitNumber() {
+        var inputDefault = $(this).val();
+
+        if (inputDefault.indexOf(".")!=-1) {
+            inputDefault = inputDefault + "";
+            inputDefault = inputDefault.substring(0,inputDefault.indexOf(".") + Number(decimal)+1);
+            inputDefault = Number(inputDefault);
+        }
+
+        $(checkedDom).children('.form-control')[0].value = inputDefault;//默认数字内容
+    }
+
+    $('.controlBox .number-default').on('keyup', limitNumber);
+    $('.controlBox .number-default').on('focus', limitNumber);
 
     $('#options').on('keyup', function (e) {//option编辑框
         if ($(checkedDom).hasClass('radio')) {
@@ -376,7 +401,6 @@ $(function () {
                 optionshtml += '<li><input type="' + type + '" name="'+v.name+'" class="form-control" checked="' + v.checked + '"><span>' + value + '</span></li>';
             } else {
                 optionshtml += '<li><input type="' + type + '" name="'+v.name+'" class="form-control" ><span>' + value + '</span></li>';
-
             }
             textAreaStr += value + ','
         });
@@ -386,15 +410,6 @@ $(function () {
         $('#options').val(textAreaStr);
 
         optionsCheckedListener();
-    }
-
-    function checked(checkedDomTemp) {
-        console.log(checkedDomTemp[0]);
-        var $checkedlists = checkedDomTemp.find('input');
-        $checkedlists.each(function (i, v) {
-            $('.controlBox .control-options input')[i].checked = v.checked;
-            $(checkedDom).find('input')[i].checked = v.checked;
-        })
     }
 
     function optionsCheckedListener() {
@@ -420,8 +435,6 @@ $(function () {
         $('.controlBox .control-options ul').html(controlOptionHtml); //操作栏
 
         $(checkedDom).children('ul').html(controlOptionHtml); //编辑区
-
-        // checked($checkedDomTemp);
 
         optionsCheckedListener()
     }
