@@ -289,11 +289,6 @@ $(function () {
             $('#radio-false').attr('checked', 'false');
         }
 
-        if ($(checkedDom).find('label').hasClass('title-ver')) {//布局方式
-            $('#radio-ver').attr('checked', 'true');
-        } else {
-            $('#radio-hor').attr('checked', 'false');
-        }
 
         //各表单不同操作
         var $controlDom = $(checkedDom).find('.form-control');
@@ -337,14 +332,6 @@ $(function () {
         }
     });
 
-    $('.controlBox .controlRadio-lay').on('click', function (e) {//布局方式
-        var controlRadio = $(e.target).val();
-        if (controlRadio == '2') {
-            $(checkedDom).find('label').addClass('title-ver');
-        } else {
-            $(checkedDom).find('label').removeClass('title-ver');
-        }
-    });
 
     $('.controlBox .input-max-length').on('keyup', function (e) {
         var inputMax = $('.controlBox .input-max-length').val();
@@ -440,15 +427,13 @@ $(function () {
 
     var formData = [//初始化json对象
         {
-            // "componentkey": "FieldsetLayout",
             "title": $dropAreaTitle.text(),
             "childs": []
         }
     ];
 
-    function initJsonObj(hasverticalClass, formControl, $formControlLabel, hasNessesaryClass, options) {
+    function initJsonObj(formControl, $formControlLabel, hasNessesaryClass, options) {
         return {
-            "titleLayout": hasverticalClass,
             "describe": "",
             "componentType": formControl.nodeName.toLowerCase()
             , "type": formControl.type
