@@ -461,6 +461,18 @@ $(function () {
         };
     }
 
+    function optionsToJson(v,options) {
+        if ($(v).hasClass('radio') || $(v).hasClass('checkbox')) {
+
+            $(v).find('ul li').each(function (i, v) {
+                var text = $(v).children('span').text();
+                var checked = $(v).children('input')[0].checked;
+                // console.log($(v).children('input'));
+                options.push({"checked": checked, "text": text});
+            });
+        }
+    }
+
     $('.save').on('click', function (e) {
 
         formData[0].title = $controlFormName.val();
@@ -487,16 +499,7 @@ $(function () {
                         var $formControlLabel = $(v).find('label');
                         var hasNessesaryClass = $(v).hasClass('nessesaryTag');
                         var options = [];
-
-                        if ($(v).hasClass('radio') || $(v).hasClass('checkbox')) {
-
-                            $(v).find('ul li').each(function (i, v) {
-                                var text = $(v).children('span').text();
-                                var checked = $(v).children('input')[0].checked;
-                                // console.log($(v).children('input'));
-                                options.push({"checked": checked, "text": text});
-                            });
-                        }
+                        optionsToJson(v,options);
 
                         layoutChild = initJsonObj( formControl,
                             $formControlLabel, hasNessesaryClass, options);
@@ -511,17 +514,7 @@ $(function () {
             } else {
                 var hasNessesaryClass = $(v).hasClass('nessesaryTag');
                 var options = [];
-
-
-                if ($(v).hasClass('radio') || $(v).hasClass('checkbox')) {
-
-                    $(v).find('ul li').each(function (i, v) {
-                        var text = $(v).children('span').text();
-                        var checked = $(v).children('input')[0].checked;
-                        // console.log($(v).children('input'));
-                        options.push({"checked": checked, "text": text});
-                    });
-                }
+                optionsToJson(v,options);
 
                 formData[0].childs[i] = initJsonObj( formControl,
                     $formControlLabel, hasNessesaryClass, options);
