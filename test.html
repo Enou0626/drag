@@ -47,20 +47,15 @@
 
 <input type="text" class="test1" tag="TEST">
 <textArea class="test2"></textArea>
-<input type="radio" class="radio" name="radio" checked>
+<input type="radio" class="radio" name="radio" checked="false">
 <input type="radio" class="radio" name="radio">
-<input type="radio" class="radio" name="radio">
+<input type="checkbox" class="checkbox" name="checkbox" checked="false">
 
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script>
-    //    $('.test1')[0].tag = 'test';
-   $('.radio').on('change',function (e) {
-       $('.radio').each(function (i, v) {
-           console.log(v.checked);
-       })
-   })
-
+    console.log($('.checkbox')[0].checked);
+    var boolean = false
 </script>
 </body>
 </html>

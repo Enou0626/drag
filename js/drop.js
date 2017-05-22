@@ -30,6 +30,8 @@ $(function () {
 
     var moveDom;
 
+    var domID;
+
     var tag =
         {
             index: -1, //目前鼠标正落在哪个表单元素上面
@@ -157,6 +159,10 @@ $(function () {
 
         moveDom = e.target;
 
+        domID = Math.floor(Math.random() * 1000000);
+
+        // $(moveDom).attr('domID',Math.floor(Math.random()*1000000));
+
         //区分拖拽的元素是要新增还是要交换位置，记录到flag上，1表示要新增，2表示交换位置
         if ($(moveDom).parent().hasClass('dragArea')) {
             tag.flag = 1;
@@ -184,6 +190,11 @@ $(function () {
 
     $('.dropArea').droppable({
         drop: function (e) {
+
+            if ($(moveDom).hasClass('radio')) {
+                $(moveDom).find('input').attr('name', domID);
+            }
+
             if (tag.index != -1) {
                 var index = tag.index;
                 if (tag.deraction == 1) {//插上
@@ -241,39 +252,35 @@ $(function () {
 
 
     /*
-     * 操控栏
-     *
+     * 属性操控
      * */
 
     var checkedDom, checkedDomTitle;
+
+    function selectedColor() {
+        $(checkedDom).css('backgroundColor', 'papayawhip');
+        checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
+        $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
+    }
 
     $('.dropArea').on('click', function (e) {//选中元素
 
         $('.control-special').css('display', 'none');//隐藏所有非公共控制表单
         $('.dropArea .form-group').css('backgroundColor', 'whitesmoke');//初始化背景色
 
-
         checkedDom = e.target;
-
-        console.log(checkedDom);
 
         var isFather = $(checkedDom).parent().parent().hasClass('form-group');
         var isGrandFather = $(checkedDom).parent().parent().parent().hasClass('form-group');
 
         if ($(checkedDom).hasClass('form-group')) {
-            $(checkedDom).css('backgroundColor', 'papayawhip');
-            checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
-            $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
+            selectedColor();
         } else if (isFather) {
             checkedDom = $(checkedDom).parent().parent()[0];
-            $(checkedDom).css('backgroundColor', 'papayawhip');
-            checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
-            $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
+            selectedColor();
         } else if (isGrandFather) {
             checkedDom = $(checkedDom).parent().parent().parent()[0];
-            $(checkedDom).css('backgroundColor', 'papayawhip');
-            checkedDomTitle = $(checkedDom).find('label').text();//得到选中元素标题文字
-            $('.controlBox .controlTitle').val(checkedDomTitle);//根据得到的标题文字设置控制栏内容
+            selectedColor();
         }
 
         if ($(checkedDom).hasClass('nessesaryTag')) {//是否必填
@@ -296,6 +303,7 @@ $(function () {
         }
         var isInputText = nodeName == 'input' && $controlDom[0].type == 'text';
         var isRadios = $(checkedDom).hasClass('radio');
+        var isCheckbox = $(checkedDom).hasClass('checkbox');
 
         if (isInputText || nodeName == 'textarea') {//单行或多行文本
             // console.log($controlDom[0].localName+";"+$controlDom[0].type);
@@ -305,27 +313,12 @@ $(function () {
             $('.controlBox .input-max-length').val($controlDom[0].maxLength);
             $('.controlBox .input-default').val($controlDom[0].value);
         } else if (isRadios) {
-            console.log('radio');
-            $('.control-options').css('display', 'block');
-            var textAreaStr = '';
-            var optionshtml = '';
-
-            $controlDom.each(function (i, v) {
-                var value = $(v).next('span').text();
-                optionshtml += '<input type="radio" class="form-control" name="radio"><span>' + value + '</span>';
-                textAreaStr += value + ','
-            });
-
-            textAreaStr = textAreaStr.substring(0, textAreaStr.length - 1);
-            $('.controlBox .control-options ul').html(optionshtml);
-            $('#options').val(textAreaStr);
-
-            optionsListener();
-
+            initControlOptions($controlDom, 'radio');
+        } else if (isCheckbox) {
+            initControlOptions($controlDom, 'checkbox');
         }
-
-
     });
+
 
     /*
      * 操控区事件监听
@@ -364,27 +357,73 @@ $(function () {
     });
 
     $('#options').on('keyup', function (e) {//option编辑框
-        var options = $('#options').val();
-        var optionListsArr = options.split(',');
-        var controlOptionHtml = '';
+        if ($(checkedDom).hasClass('radio')) {
+            optionsStatusListener('radio');
+        } else if ($(checkedDom).hasClass('checkbox')) {
+            optionsStatusListener('checkbox');
 
-        for (var i = 0; i < optionListsArr.length; i++) {
-            var obj = optionListsArr[i];
-            controlOptionHtml += '<li><input type="radio"  class="form-control" name="radio"><span>' + obj + '</span></li>'
         }
-
-        $('.controlBox .control-options ul').html(controlOptionHtml); //操作栏
-
-        $(checkedDom).children('ul').html(controlOptionHtml); //编辑区
     });
 
-    function optionsListener() {
+    function initControlOptions($controlDom, type) {
+        $('.control-options').css('display', 'block');
+        var textAreaStr = '';
+        var optionshtml = '';
+
+        $controlDom.each(function (i, v) {
+            var value = $(v).next('span').text();
+            if (v.checked) {
+                optionshtml += '<li><input type="' + type + '" class="form-control" checked="' + v.checked + '"><span>' + value + '</span></li>';
+            } else {
+                optionshtml += '<li><input type="' + type + '" class="form-control" ><span>' + value + '</span></li>';
+
+            }
+            textAreaStr += value + ','
+        });
+
+        textAreaStr = textAreaStr.substring(0, textAreaStr.length - 1);
+        $('.controlBox .control-options ul').html(optionshtml);
+        $('#options').val(textAreaStr);
+
+        optionsCheckedListener();
+    }
+
+    function checked(checkedDomTemp) {
+        console.log(checkedDomTemp[0]);
+        var $checkedlists = checkedDomTemp.find('input');
+        $checkedlists.each(function (i, v) {
+            $('.controlBox .control-options input')[i].checked = v.checked;
+            $(checkedDom).find('input')[i].checked = v.checked;
+        })
+    }
+
+    function optionsCheckedListener() {
         var $optionLists = $('.control-options input');
         $optionLists.on('change', function (e) {
             $optionLists.each(function (i, v) {
                 $(checkedDom).find('input')[i].checked = v.checked;
             })
         });
+    }
+
+    function optionsStatusListener(type) {
+        var optionsText = $('#options').val();
+        optionsText = optionsText.replace(/\n/g,',');
+        var optionListsArr = optionsText.split(',');
+        var controlOptionHtml = '';
+
+        for (var i = 0; i < optionListsArr.length; i++) {
+            var obj = optionListsArr[i];
+            controlOptionHtml += '<li><input type="' + type + '" class="form-control" name="' + type + '"><span>' + obj + '</span></li>'
+        }
+
+        $('.controlBox .control-options ul').html(controlOptionHtml); //操作栏
+
+        $(checkedDom).children('ul').html(controlOptionHtml); //编辑区
+
+        // checked($checkedDomTemp);
+
+        optionsCheckedListener()
     }
 
     //表单名设置与获取
@@ -477,7 +516,7 @@ $(function () {
                 var options = [];
 
 
-                if ($(v).hasClass('radio')) {
+                if ($(v).hasClass('radio') || $(v).hasClass('checkbox')) {
 
                     $(v).find('ul li').each(function (i, v) {
                         var text = $(v).children('span').text();
