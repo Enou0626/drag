@@ -373,9 +373,9 @@ $(function () {
         $controlDom.each(function (i, v) {
             var value = $(v).next('span').text();
             if (v.checked) {
-                optionshtml += '<li><input type="' + type + '" class="form-control" checked="' + v.checked + '"><span>' + value + '</span></li>';
+                optionshtml += '<li><input type="' + type + '" name="'+v.name+'" class="form-control" checked="' + v.checked + '"><span>' + value + '</span></li>';
             } else {
-                optionshtml += '<li><input type="' + type + '" class="form-control" ><span>' + value + '</span></li>';
+                optionshtml += '<li><input type="' + type + '" name="'+v.name+'" class="form-control" ><span>' + value + '</span></li>';
 
             }
             textAreaStr += value + ','
