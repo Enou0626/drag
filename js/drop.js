@@ -490,7 +490,7 @@ $(function () {
                         var hasverticalClass = $(v).find('label').hasClass('title-ver') ? 'ver' : 'hor';
                         var options = [];
 
-                        if ($(v).hasClass('radio')) {
+                        if ($(v).hasClass('radio') || $(v).hasClass('checkbox')) {
 
                             $(v).find('ul li').each(function (i, v) {
                                 var text = $(v).children('span').text();
