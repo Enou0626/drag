@@ -318,6 +318,9 @@ $(function () {
         } else if (isNumber) {
             $('.control-number').css('display', 'block');
             $('.controlBox .number-default').val($controlDom[0].value);
+            $('.controlBox .number-max').val($controlDom[0].max);
+            $('.controlBox .number-min').val($controlDom[0].min);
+            $('.controlBox .number-decimal').val($controlDom[0].decimal);
 
         }
     });
@@ -360,26 +363,51 @@ $(function () {
     });
 
     var decimal = 0;
+    var numberMax = 100;
+    var numberMin = -100;
 
-    $('.controlBox .number-decimal').on('change',function (e) {
+    $('.controlBox .number-decimal').on('change', function (e) {
         decimal = this.value;
-        console.log(this.value);
+        pushNumber();
+        $(checkedDom).children('.form-control').prop('decimal',decimal);
+
+    });
+    $('.controlBox .number-max').on('keyup', function (e) {
+        numberMax = this.value;
+        pushNumber();
+        $(checkedDom).children('.form-control')[0].max = numberMax;
+        // $('.controlBox .number-default')[0].max=$(checkedDom).children('.form-control')[0].max
+    });
+    $('.controlBox .number-min').on('keyup', function (e) {
+        numberMin = this.value;
+        pushNumber();
+        $(checkedDom).children('.form-control')[0].min = numberMin;
+        // $('.controlBox .number-default')[0].min=$(checkedDom).children('.form-control')[0].min TODO
+
     });
 
-    function limitNumber() {
-        var inputDefault = $(this).val();
+    function pushNumber() {
+        var inputDefault = $('.controlBox .number-default').val();
 
-        if (inputDefault.indexOf(".")!=-1) {
+        if (inputDefault.indexOf(".") != -1) {
             inputDefault = inputDefault + "";
-            inputDefault = inputDefault.substring(0,inputDefault.indexOf(".") + Number(decimal)+1);
+            inputDefault = inputDefault.substring(0, inputDefault.indexOf(".") + Number(decimal) + 1);
             inputDefault = Number(inputDefault);
         }
+
+        // if (inputDefault > numberMax) {
+        //     inputDefault = numberMax;
+        // }
+        //
+        // if (inputDefault < numberMin) {
+        //     inputDefault = numberMin
+        // }
 
         $(checkedDom).children('.form-control')[0].value = inputDefault;//默认数字内容
     }
 
-    $('.controlBox .number-default').on('keyup', limitNumber);
-    $('.controlBox .number-default').on('focus', limitNumber);
+    $('.controlBox .number-default').on('keyup', pushNumber);
+    $('.controlBox .number-default').on('focus', pushNumber);
 
     $('#options').on('keyup', function (e) {//option编辑框
         if ($(checkedDom).hasClass('radio')) {
@@ -398,9 +426,9 @@ $(function () {
         $controlDom.each(function (i, v) {
             var value = $(v).next('span').text();
             if (v.checked) {
-                optionshtml += '<li><input type="' + type + '" name="'+v.name+'" class="form-control" checked="' + v.checked + '"><span>' + value + '</span></li>';
+                optionshtml += '<li><input type="' + type + '" name="' + v.name + '" class="form-control" checked="' + v.checked + '"><span>' + value + '</span></li>';
             } else {
-                optionshtml += '<li><input type="' + type + '" name="'+v.name+'" class="form-control" ><span>' + value + '</span></li>';
+                optionshtml += '<li><input type="' + type + '" name="' + v.name + '" class="form-control" ><span>' + value + '</span></li>';
             }
             textAreaStr += value + ','
         });
@@ -423,7 +451,7 @@ $(function () {
 
     function optionsStatusListener(type) {
         var optionsText = $('#options').val();
-        optionsText = optionsText.replace(/\n/g,',');
+        optionsText = optionsText.replace(/\n/g, ',');
         var optionListsArr = optionsText.split(',');
         var controlOptionHtml = '';
 
@@ -459,7 +487,10 @@ $(function () {
         }
     ];
 
-    function initJsonObj( formControl, $formControlLabel, hasNessesaryClass, options) {
+    function initJsonObj(formControl, $formControlLabel, hasNessesaryClass, options) {
+
+        console.log(formControl['decimal']);
+
         return {
             "describe": "",
             "componentType": formControl.nodeName.toLowerCase()
@@ -470,11 +501,14 @@ $(function () {
             , "defaultText": formControl.value
             , "maxLength": formControl.maxLength
             , "options": options
+            , "maxNumber":formControl.max
+            , "minNumber":formControl.min
+            , "decimal":formControl.decimal || 0
 
         };
     }
 
-    function optionsToJson(v,options) {
+    function optionsToJson(v, options) {
         if ($(v).hasClass('radio') || $(v).hasClass('checkbox')) {
 
             $(v).find('ul li').each(function (i, v) {
@@ -512,9 +546,9 @@ $(function () {
                         var $formControlLabel = $(v).find('label');
                         var hasNessesaryClass = $(v).hasClass('nessesaryTag');
                         var options = [];
-                        optionsToJson(v,options);
+                        optionsToJson(v, options);
 
-                        layoutChild = initJsonObj( formControl,
+                        layoutChild = initJsonObj(formControl,
                             $formControlLabel, hasNessesaryClass, options);
 
                     });
@@ -527,9 +561,9 @@ $(function () {
             } else {
                 var hasNessesaryClass = $(v).hasClass('nessesaryTag');
                 var options = [];
-                optionsToJson(v,options);
+                optionsToJson(v, options);
 
-                formData[0].childs[i] = initJsonObj( formControl,
+                formData[0].childs[i] = initJsonObj(formControl,
                     $formControlLabel, hasNessesaryClass, options);
 
             }

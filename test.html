@@ -27,26 +27,7 @@
     </style>
 </head>
 <body>
-<div class="dragbox">
-    <div class="drag"></div>
-    <div class="drag"></div>
-    <div class="drag"></div>
-</div>
 
-<div class="dropbox">
-
-</div>
-
-<ul>
-    <li>1</li>
-    <li>2</li>
-    <li>3</li>
-    <li>4</li>
-    <li>5</li>
-</ul>
-
-<input type="text" class="test1" tag="TEST">
-<textArea class="test2"></textArea>
 <input type="radio" class="radio" name="radio" checked="false">
 <input type="radio" class="radio" name="radio">
 <input type="checkbox" class="checkbox" name="checkbox" checked="false">
@@ -54,84 +35,8 @@
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script>
-    console.log($('.checkbox')[0].checked);
-    var boolean = false
-    var data = [{
-        "title": "表单",
-        "childs": [{
-            "layout": [{
-                "titleLayout": "hor",
-                "describe": "",
-                "componentType": "input",
-                "type": "radio",
-                "value": "on",
-                "title": "单选框",
-                "required": false,
-                "defaultText": "on",
-                "maxLength": -1,
-                "options": [{"checked": false, "text": "选项1"}, {"checked": false, "text": "选项2"}, {
-                    "checked": false,
-                    "text": "选项3"
-                }]
-            }, {
-                "titleLayout": "hor",
-                "describe": "",
-                "componentType": "input",
-                "type": "checkbox",
-                "value": "on",
-                "title": "多选框",
-                "required": false,
-                "defaultText": "on",
-                "maxLength": -1,
-                "options": [{"checked": true, "text": "选项1"}, {"checked": true, "text": "选项2"}, {
-                    "checked": false,
-                    "text": "选项3"
-                }]
-            }, {
-                "titleLayout": "hor",
-                "describe": "",
-                "componentType": "input",
-                "type": "radio",
-                "value": "on",
-                "title": "单选框",
-                "required": false,
-                "defaultText": "on",
-                "maxLength": -1,
-                "options": [{"checked": false, "text": "选项1"}, {"checked": false, "text": "选项2"}, {
-                    "checked": false,
-                    "text": "选项3"
-                }]
-            }]
-        }, {
-            "titleLayout": "hor",
-            "describe": "",
-            "componentType": "input",
-            "type": "checkbox",
-            "value": "on",
-            "title": "多选框",
-            "required": false,
-            "defaultText": "on",
-            "maxLength": -1,
-            "options": [{"checked": true, "text": "选项1"}, {"checked": true, "text": "选项2"}, {
-                "checked": false,
-                "text": "选项3"
-            }]
-        }, {
-            "titleLayout": "hor",
-            "describe": "",
-            "componentType": "input",
-            "type": "radio",
-            "value": "on",
-            "title": "单选框",
-            "required": false,
-            "defaultText": "on",
-            "maxLength": -1,
-            "options": [{"checked": false, "text": "选项1"}, {"checked": false, "text": "选项2"}, {
-                "checked": false,
-                "text": "选项3"
-            }]
-        }]
-    }]
+    $('.checkbox').prop('a','aaaaa');
+    console.log($('.checkbox')[0].a);
 </script>
 </body>
 </html>
