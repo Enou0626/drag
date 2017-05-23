@@ -367,46 +367,52 @@ $(function () {
     var numberMin = -100;
 
     $('.controlBox .number-decimal').on('change', function (e) {
-        decimal = this.value;
-        pushNumber();
-        $(checkedDom).children('.form-control').prop('decimal',decimal);
+        decimal = $('.controlBox .number-decimal')[0].value;
+        // pushNumber();
+        $(checkedDom).children('.form-control').prop('decimal', decimal);
 
     });
     $('.controlBox .number-max').on('keyup', function (e) {
-        numberMax = this.value;
-        pushNumber();
+        numberMax = $('.controlBox .number-max')[0].value;
         $(checkedDom).children('.form-control')[0].max = numberMax;
-        // $('.controlBox .number-default')[0].max=$(checkedDom).children('.form-control')[0].max
+        // pushNumber();
+
     });
     $('.controlBox .number-min').on('keyup', function (e) {
-        numberMin = this.value;
-        pushNumber();
+        numberMin = $('.controlBox .number-min')[0].value;
         $(checkedDom).children('.form-control')[0].min = numberMin;
-        // $('.controlBox .number-default')[0].min=$(checkedDom).children('.form-control')[0].min TODO
+        // pushNumber();
 
     });
 
     function pushNumber() {
+
         var inputDefault = $('.controlBox .number-default').val();
+
+        // decimal = $('.controlBox .number-decimal').value;
 
         if (inputDefault.indexOf(".") != -1) {
             inputDefault = inputDefault + "";
             inputDefault = inputDefault.substring(0, inputDefault.indexOf(".") + Number(decimal) + 1);
             inputDefault = Number(inputDefault);
         }
+        console.log(inputDefault);
 
-        // if (inputDefault > numberMax) {
-        //     inputDefault = numberMax;
-        // }
-        //
-        // if (inputDefault < numberMin) {
-        //     inputDefault = numberMin
-        // }
+        inputDefault = Number(inputDefault);
+        numberMin = Number(numberMin);
+        numberMax = Number(numberMax);
+
+        inputDefault = inputDefault > numberMax ? numberMax : inputDefault;
+        inputDefault = inputDefault < numberMin ? numberMin : inputDefault;
+
+        console.log(inputDefault);
 
         $(checkedDom).children('.form-control')[0].value = inputDefault;//默认数字内容
+        $('.controlBox .number-default').val(inputDefault);
+
     }
 
-    $('.controlBox .number-default').on('keyup', pushNumber);
+    $('.controlBox .number-default').on('blur', pushNumber);
     $('.controlBox .number-default').on('focus', pushNumber);
 
     $('#options').on('keyup', function (e) {//option编辑框
@@ -501,9 +507,9 @@ $(function () {
             , "defaultText": formControl.value
             , "maxLength": formControl.maxLength
             , "options": options
-            , "maxNumber":formControl.max
-            , "minNumber":formControl.min
-            , "decimal":formControl.decimal || 0
+            , "maxNumber": formControl.max
+            , "minNumber": formControl.min
+            , "decimal": formControl.decimal || 0
 
         };
     }
