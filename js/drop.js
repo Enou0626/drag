@@ -582,7 +582,7 @@ $(function () {
         } else if ($(v).hasClass('select')) {
 
             $(v).find('option').each(function (i, v) {
-                var text = $(v).val();
+                var text = $(v).text();
                 var selected = v.selected;
                 options.push({"selected": selected, "text": text});
 
