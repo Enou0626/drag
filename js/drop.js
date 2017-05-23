@@ -307,6 +307,7 @@ $(function () {
         var isNumber = nodeName == 'input' && $controlDom[0].type == 'number';
         var isSelect = $(checkedDom).hasClass('select');
         var isDate = $(checkedDom).hasClass('date');
+        var isUpload = $(checkedDom).hasClass('upload');
 
         if (isInputText) {//单行或多行文本
             // console.log($controlDom[0].localName+";"+$controlDom[0].type);
@@ -335,12 +336,18 @@ $(function () {
             $('.control-date,.control-now').css('display', 'block');
             var isNowDate = $(checkedDom).find('input')[0].nowDate || false;
             $('.control-now').find('input')[0].checked=isNowDate;
+
             var dateText = $(checkedDom).find('input').val();
             $('.control-date span').each(function (i, v) {
                 if ($(this).text() == dateText) {
                     $(this).prev()[0].checked = true;
                 }
             })
+
+        }else if (isUpload) {
+            $('.control-upload').css('display', 'block');
+            var isAllowOnly = $(checkedDom).find('input')[0].allowOnly || false;
+            $('.control-now').find('input')[0].checked=isAllowOnly;
 
         }
     });
@@ -381,6 +388,12 @@ $(function () {
     $('.controlBox .controlCheckbox-date').on('click', function (e) {//使用当前日期
         var isNowDate = e.target.checked;
         $(checkedDom).find('input').prop('nowDate',isNowDate);
+
+    });
+
+    $('.controlBox .controlCheckbox-upload').on('click', function (e) {//上传唯一
+        var allowOnly = e.target.checked;
+        $(checkedDom).find('input').prop('allowOnly',allowOnly);
 
     });
 
@@ -593,6 +606,7 @@ $(function () {
             , "minNumber": formControl.min
             , "decimal": formControl.decimal || 0
             , "nowDate": formControl.nowDate || false
+            , "allowOnly": formControl.allowOnly || false
 
         };
     }
