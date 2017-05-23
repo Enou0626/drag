@@ -63,6 +63,7 @@
             height: 100%;
             /*background-color: skyblue;*/
         }
+
         .dropArea input {
 
         }
@@ -137,10 +138,11 @@
             display: none;
         }
 
-        #options{
+        #options {
             width: 100%;
         }
-        .number-decimal{
+
+        .number-decimal {
             width: 100%;
         }
 
@@ -153,12 +155,12 @@
         <div class="title ">字段控件</div>
 
         <form class="dragArea clearfix">
-            <div class="form-group">
+            <div class="form-group input-text">
                 <label>文本输入框</label>
                 <input type="text" class="form-control" value="单行文本" maxlength="10" disabled>
             </div>
 
-            <div class="form-group">
+            <div class="form-group input-text">
                 <label>多行文本输入框</label>
                 <textarea class="form-control" rows="3" maxlength="500">多行文本</textarea>
             </div>
@@ -170,7 +172,7 @@
                         <input type="radio" checked="true" class="form-control" name="radio"> <span>选项1</span>
                     </li>
                     <li>
-                        <input type="radio"  class="form-control" name="radio"> <span>选项2</span>
+                        <input type="radio" class="form-control" name="radio"> <span>选项2</span>
                     </li>
                     <li>
                         <input type="radio" class="form-control" name="radio"> <span>选项3</span>
@@ -185,7 +187,7 @@
                         <input type="checkbox" class="form-control" checked="false" name="checkbox"> <span>选项1</span>
                     </li>
                     <li>
-                        <input type="checkbox"  class="form-control" checked="false" name="checkbox"> <span>选项2</span>
+                        <input type="checkbox" class="form-control" checked="false" name="checkbox"> <span>选项2</span>
                     </li>
                     <li>
                         <input type="checkbox" class="form-control" name="checkbox"> <span>选项3</span>
@@ -205,6 +207,18 @@
                     <option value="" class="form-control">选择2</option>
                     <option value="" class="form-control">选择3</option>
                 </select>
+            </div>
+
+            <div class="form-group date">
+                <label>日期</label>
+                <input type="text" class="form-control" value="年-月-日 时:分" disabled>
+            </div>
+
+            <div class="form-group date">
+                <label>日期区间</label>
+                <input type="text" class="form-control" value="年-月-日 时:分" disabled>
+                -
+                <input type="text" class="form-control" value="年-月-日 时:分" disabled>
             </div>
 
             <div class="form-group">
@@ -300,8 +314,34 @@
 
         <div class="controlForm control-special control-options hidden">
             <div class="tip">选项设置 :</div>
-            <textarea name="" id="options" rows="3" >option1,option2</textarea>
+            <textarea name="" id="options" rows="3">option1,option2</textarea>
             <ul></ul>
+        </div>
+
+        <div class="controlForm control-now control-special hidden">
+            <input type="checkbox" class="controlCheckbox-date"> <span>当前时间</span>
+        </div>
+
+        <div class="controlForm control-date control-special hidden">
+            <div class="tip">日期格式 :</div>
+            <div class="data-radio">
+                <label for="">
+                    <input name="date-format" type="radio" class="controlRadio-date" checked value='年-月-日 时:分'>
+                    <span>年-月-日 时:分</span>
+                </label>
+            </div>
+            <div class="data-radio">
+                <label for="">
+                    <input name="date-format" type="radio" class="controlRadio-date" value='年-月-日'>
+                    <span>年-月-日</span>
+                </label>
+            </div>
+            <div class="data-radio">
+                <label for="">
+                    <input name="date-format" type="radio" class="controlRadio-date" value='年-月'>
+                    <span>年-月</span>
+                </label>
+            </div>
         </div>
 
         <div class="controlForm">

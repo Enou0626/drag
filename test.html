@@ -37,62 +37,73 @@
     <option value="3">333</option>
 </select>
 
+<input type="date">
+
+
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
+<!--<div id="datepicker"></div>-->
+
 <script>
-    console.log($('#select').val());
+    $("#datepicker").datepicker();
     var data = [{
         "title": "表单",
         "childs": [{
             "describe": "",
-            "componentType": "option",
-            "value": "选择1",
-            "title": "下拉菜单",
+            "componentType": "input",
+            "type": "text",
+            "value": "年-月-日 时:分",
+            "title": "日期",
             "required": false,
-            "defaultText": "选择1",
-            "options": [{"selected": false, "text": "选择1"}, {"selected": true, "text": "选择2"}, {
-                "selected": false,
-                "text": "选"
-            }],
-            "decimal": 0
+            "defaultText": "年-月-日 时:分",
+            "maxLength": -1,
+            "options": [],
+            "maxNumber": "",
+            "minNumber": "",
+            "decimal": 0,
+            "nowDate": true
         }, {
-            "layout": [{
-                "describe": "",
-                "componentType": "option",
-                "value": "",
-                "title": "下拉菜单",
-                "required": false,
-                "defaultText": "",
-                "options": [{"selected": true, "text": ""}, {"selected": false, "text": ""}, {
-                    "selected": false,
-                    "text": ""
-                }],
-                "decimal": 0
-            }, {
-                "describe": "",
-                "componentType": "option",
-                "value": "",
-                "title": "下拉菜单",
-                "required": false,
-                "defaultText": "",
-                "options": [{"selected": true, "text": ""}, {"selected": false, "text": ""}, {
-                    "selected": false,
-                    "text": ""
-                }],
-                "decimal": 0
-            }, {
-                "describe": "",
-                "componentType": "option",
-                "value": "",
-                "title": "下拉菜单",
-                "required": false,
-                "defaultText": "",
-                "options": [{"selected": true, "text": ""}, {"selected": false, "text": ""}, {
-                    "selected": false,
-                    "text": ""
-                }],
-                "decimal": 0
-            }]
+            "describe": "",
+            "componentType": "input",
+            "type": "text",
+            "value": "年-月-日 时:分",
+            "title": "日期区间",
+            "required": false,
+            "defaultText": "年-月-日 时:分",
+            "maxLength": -1,
+            "options": [],
+            "maxNumber": "",
+            "minNumber": "",
+            "decimal": 0,
+            "nowDate": true
+        }, {
+            "describe": "",
+            "componentType": "input",
+            "type": "text",
+            "value": "年-月-日 时:分",
+            "title": "日期区间",
+            "required": false,
+            "defaultText": "年-月-日 时:分",
+            "maxLength": -1,
+            "options": [],
+            "maxNumber": "",
+            "minNumber": "",
+            "decimal": 0,
+            "nowDate": false
+        }, {
+            "describe": "",
+            "componentType": "input",
+            "type": "text",
+            "value": "年-月",
+            "title": "日期",
+            "required": false,
+            "defaultText": "年-月",
+            "maxLength": -1,
+            "options": [],
+            "maxNumber": "",
+            "minNumber": "",
+            "decimal": 0,
+            "nowDate": false
         }]
     }]
 </script>

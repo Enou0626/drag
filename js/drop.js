@@ -299,19 +299,23 @@ $(function () {
         if ($controlDom[0]) {
             var nodeName = $controlDom[0].nodeName.toLowerCase();
         }
-        var isInputText = nodeName == 'input' && $controlDom[0].type == 'text';
+
+        // var isInputText = nodeName == 'input' && $controlDom[0].type == 'text';
+        var isInputText = $(checkedDom).hasClass('input-text');
         var isRadios = $(checkedDom).hasClass('radio');
         var isCheckbox = $(checkedDom).hasClass('checkbox');
         var isNumber = nodeName == 'input' && $controlDom[0].type == 'number';
         var isSelect = $(checkedDom).hasClass('select');
+        var isDate = $(checkedDom).hasClass('date');
 
-        if (isInputText || nodeName == 'textarea') {//单行或多行文本
+        if (isInputText) {//单行或多行文本
             // console.log($controlDom[0].localName+";"+$controlDom[0].type);
             $('.control-input-width').css('display', 'block');
-            $('.control-input-default').css('display', 'block');
-
             $('.controlBox .input-max-length').val($controlDom[0].maxLength);
+
+            $('.control-input-default').css('display', 'block');
             $('.controlBox .input-default').val($controlDom[0].value);
+
         } else if (isRadios) {
             initControlOptions($controlDom, 'radio');
         } else if (isCheckbox) {
@@ -326,6 +330,17 @@ $(function () {
         } else if (isSelect) {
             $('.control-options').css('display', 'block');
             initSelectOptions($controlDom);
+
+        } else if (isDate) {
+            $('.control-date,.control-now').css('display', 'block');
+            var isNowDate = $(checkedDom).find('input')[0].nowDate || false;
+            $('.control-now').find('input')[0].checked=isNowDate;
+            var dateText = $(checkedDom).find('input').val();
+            $('.control-date span').each(function (i, v) {
+                if ($(this).text() == dateText) {
+                    $(this).prev()[0].checked = true;
+                }
+            })
 
         }
     });
@@ -355,6 +370,18 @@ $(function () {
         } else {
             $(checkedDom).find('label').removeClass('title-ver');
         }
+    });
+
+    $('.controlBox .controlRadio-date').on('click', function (e) {//日期格式
+        var controlRadioText = $(e.target).val();
+        $(checkedDom).find('input').val(controlRadioText);
+
+    });
+
+    $('.controlBox .controlCheckbox-date').on('click', function (e) {//使用当前日期
+        var isNowDate = e.target.checked;
+        $(checkedDom).find('input').prop('nowDate',isNowDate);
+
     });
 
     $('.controlBox .input-max-length').on('keyup', function (e) {
@@ -565,6 +592,7 @@ $(function () {
             , "maxNumber": formControl.max
             , "minNumber": formControl.min
             , "decimal": formControl.decimal || 0
+            , "nowDate": formControl.nowDate || false
 
         };
     }
