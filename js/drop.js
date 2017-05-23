@@ -303,7 +303,7 @@ $(function () {
         var isRadios = $(checkedDom).hasClass('radio');
         var isCheckbox = $(checkedDom).hasClass('checkbox');
         var isNumber = nodeName == 'input' && $controlDom[0].type == 'number';
-        var isSelect =$(checkedDom).hasClass('select');
+        var isSelect = $(checkedDom).hasClass('select');
 
         if (isInputText || nodeName == 'textarea') {//单行或多行文本
             // console.log($controlDom[0].localName+";"+$controlDom[0].type);
@@ -419,7 +419,7 @@ $(function () {
         } else if ($(checkedDom).hasClass('checkbox')) {
             optionsStatusListener('checkbox');
         } else if ($(checkedDom).hasClass('select')) {
-            console.log('select');
+            optionsStatusListener('select');
         }
     });
 
@@ -431,9 +431,9 @@ $(function () {
         $controlDom.each(function (i, v) {
             var value = $(v).text();
             if (v.selected) {
-                optionshtml += '<option class="form-control" selected="'+v.selected+'">'+value+'</option>'
+                optionshtml += '<option class="form-control" selected="' + v.selected + '">' + value + '</option>'
             } else {
-                optionshtml += '<option class="form-control">'+value+'</option>'
+                optionshtml += '<option class="form-control">' + value + '</option>'
             }
             textAreaStr += value + ','
         });
@@ -499,16 +499,35 @@ $(function () {
         var optionListsArr = optionsText.split(',');
         var controlOptionHtml = '';
 
-        for (var i = 0; i < optionListsArr.length; i++) {
-            var obj = optionListsArr[i];
-            controlOptionHtml += '<li><input type="' + type + '" class="form-control" name="' + type + '"><span>' + obj + '</span></li>'
+        if (type == "radio" || type == "checkbox") {
+            for (var i = 0; i < optionListsArr.length; i++) {
+                var obj = optionListsArr[i];
+                controlOptionHtml += '<li><input type="' + type + '" class="form-control" name="' + type + '"><span>' + obj + '</span></li>'
+            }
+
+            $('.controlBox .control-options ul').html(controlOptionHtml); //操作栏
+
+            $(checkedDom).children('ul').html(controlOptionHtml); //编辑区
+
+            optionsCheckedListener()
+        } else if (type == 'select') {
+            for (var i = 0; i < optionListsArr.length; i++) {
+                var obj = optionListsArr[i];
+                controlOptionHtml += '<option class="form-control">' + obj + '</option>'
+            }
+
+            var select = document.createElement('select');
+            $('.controlBox .control-options').find('select').remove();
+            $('.controlBox .control-options').append($(select).clone());
+            $('.controlBox .control-options').find('select').html(controlOptionHtml);
+
+            $(checkedDom).find('select').remove();
+            $(checkedDom).append($(select).clone());
+            $(checkedDom).find('select').html(controlOptionHtml);
+
         }
 
-        $('.controlBox .control-options ul').html(controlOptionHtml); //操作栏
 
-        $(checkedDom).children('ul').html(controlOptionHtml); //编辑区
-
-        optionsCheckedListener()
     }
 
     //表单名设置与获取
@@ -533,8 +552,6 @@ $(function () {
 
     function initJsonObj(formControl, $formControlLabel, hasNessesaryClass, options) {
 
-        console.log(formControl['decimal']);
-
         return {
             "describe": "",
             "componentType": formControl.nodeName.toLowerCase()
@@ -558,9 +575,19 @@ $(function () {
             $(v).find('ul li').each(function (i, v) {
                 var text = $(v).children('span').text();
                 var checked = $(v).children('input')[0].checked;
-                // console.log($(v).children('input'));
                 options.push({"checked": checked, "text": text});
+
             });
+
+        } else if ($(v).hasClass('select')) {
+
+            $(v).find('option').each(function (i, v) {
+                var text = $(v).val();
+                var selected = v.selected;
+                options.push({"selected": selected, "text": text});
+
+            });
+
         }
     }
 
