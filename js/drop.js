@@ -303,6 +303,7 @@ $(function () {
         var isRadios = $(checkedDom).hasClass('radio');
         var isCheckbox = $(checkedDom).hasClass('checkbox');
         var isNumber = nodeName == 'input' && $controlDom[0].type == 'number';
+        var isSelect =$(checkedDom).hasClass('select');
 
         if (isInputText || nodeName == 'textarea') {//单行或多行文本
             // console.log($controlDom[0].localName+";"+$controlDom[0].type);
@@ -321,6 +322,10 @@ $(function () {
             $('.controlBox .number-max').val($controlDom[0].max);
             $('.controlBox .number-min').val($controlDom[0].min);
             $('.controlBox .number-decimal').val($controlDom[0].decimal);
+
+        } else if (isSelect) {
+            $('.control-options').css('display', 'block');
+            initSelectOptions($controlDom);
 
         }
     });
@@ -370,23 +375,19 @@ $(function () {
         decimal = $('.controlBox .number-decimal')[0].value;
         // pushNumber();
         $(checkedDom).children('.form-control').prop('decimal', decimal);
-
     });
     $('.controlBox .number-max').on('keyup', function (e) {
         numberMax = $('.controlBox .number-max')[0].value;
         $(checkedDom).children('.form-control')[0].max = numberMax;
         // pushNumber();
-
     });
     $('.controlBox .number-min').on('keyup', function (e) {
         numberMin = $('.controlBox .number-min')[0].value;
         $(checkedDom).children('.form-control')[0].min = numberMin;
         // pushNumber();
-
     });
 
     function pushNumber() {
-
         var inputDefault = $('.controlBox .number-default').val();
 
         // decimal = $('.controlBox .number-decimal').value;
@@ -396,7 +397,6 @@ $(function () {
             inputDefault = inputDefault.substring(0, inputDefault.indexOf(".") + Number(decimal) + 1);
             inputDefault = Number(inputDefault);
         }
-        console.log(inputDefault);
 
         inputDefault = Number(inputDefault);
         numberMin = Number(numberMin);
@@ -404,8 +404,6 @@ $(function () {
 
         inputDefault = inputDefault > numberMax ? numberMax : inputDefault;
         inputDefault = inputDefault < numberMin ? numberMin : inputDefault;
-
-        console.log(inputDefault);
 
         $(checkedDom).children('.form-control')[0].value = inputDefault;//默认数字内容
         $('.controlBox .number-default').val(inputDefault);
@@ -420,9 +418,38 @@ $(function () {
             optionsStatusListener('radio');
         } else if ($(checkedDom).hasClass('checkbox')) {
             optionsStatusListener('checkbox');
-
+        } else if ($(checkedDom).hasClass('select')) {
+            console.log('select');
         }
     });
+
+    function initSelectOptions($controlDom) {
+        $('.control-options').css('display', 'block');
+        var textAreaStr = '';
+        var optionshtml = '';
+
+        $controlDom.each(function (i, v) {
+            var value = $(v).text();
+            if (v.selected) {
+                optionshtml += '<option class="form-control" selected="'+v.selected+'">'+value+'</option>'
+            } else {
+                optionshtml += '<option class="form-control">'+value+'</option>'
+            }
+            textAreaStr += value + ','
+        });
+        textAreaStr = textAreaStr.substring(0, textAreaStr.length - 1);
+        var select = document.createElement('select');
+        $('.controlBox .control-options').find('select').remove();
+        $('.controlBox .control-options').append(select);
+        $('.controlBox .control-options select').html(optionshtml);
+        // $('.controlBox .control-options').on('change',function (e) {
+        //     console.log(this);
+        // });
+
+        $('#options').val(textAreaStr);
+
+        optionsSelectedListener();
+    }
 
     function initControlOptions($controlDom, type) {
         $('.control-options').css('display', 'block');
@@ -444,6 +471,17 @@ $(function () {
         $('#options').val(textAreaStr);
 
         optionsCheckedListener();
+    }
+
+    function optionsSelectedListener() {
+        var $options = $('.control-options');
+        // console.log($optionLists[1]);
+        $options.on('change', function (e) {
+            var $optionlists = $options.find('option');
+            $optionlists.each(function (i, v) {
+                $(checkedDom).find('option')[i].selected = v.selected;
+            })
+        });
     }
 
     function optionsCheckedListener() {

@@ -31,12 +31,16 @@
 <input type="radio" class="radio" name="radio" checked="false">
 <input type="radio" class="radio" name="radio">
 <input type="checkbox" class="checkbox" name="checkbox" checked="false">
+<select name="" id="select">
+    <option value="1">111</option>
+    <option value="2" selected>222</option>
+    <option value="3">333</option>
+</select>
 
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script>
-    $('.checkbox').prop('a','aaaaa');
-    console.log($('.checkbox')[0].a);
+    console.log($('#select').val());
 </script>
 </body>
 </html>
